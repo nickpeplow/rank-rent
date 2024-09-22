@@ -25,13 +25,18 @@ function ai_content_generator_render_page() {
     // Get all sites in the network
     $sites = get_sites();
 
-    // Get the current site ID (default to main site if not set)
-    $current_site_id = isset($_POST['selected_site']) ? intval($_POST['selected_site']) : get_main_site_id();
+    // Get the main site ID
+    $main_site_id = get_main_site_id();
 
-    // Switch to the selected site
-    switch_to_blog($current_site_id);
+    // Get the current site ID
+    $current_site_id = get_current_blog_id();
 
-    $pages = get_pages(['sort_column' => 'menu_order', 'sort_order' => 'asc']);
+    // Get the reference site ID (default to main site if not set)
+    $reference_site_id = isset($_POST['selected_site']) ? intval($_POST['selected_site']) : $main_site_id;
+
+    // Fetch pages and fields for both sites
+    $reference_site_data = get_site_data($reference_site_id);
+    $current_site_data = get_site_data($current_site_id);
 
     ?>
     <div class="wrap">
@@ -59,53 +64,39 @@ function ai_content_generator_render_page() {
         <form method="post" action="">
             <?php wp_nonce_field('ai_content_generator_action', 'ai_content_generator_nonce'); ?>
             
-            <label for="selected_site">Select Site:</label>
+            <label for="selected_site">Select Reference Site:</label>
             <select name="selected_site" id="selected_site">
                 <?php foreach ($sites as $site): ?>
-                    <option value="<?php echo esc_attr($site->blog_id); ?>" <?php selected($site->blog_id, $current_site_id); ?>>
-                        <?php echo esc_html($site->blogname); ?>
+                    <option value="<?php echo esc_attr($site->blog_id); ?>" <?php selected($site->blog_id, $reference_site_id); ?>>
+                        <?php echo esc_html(get_blog_details($site->blog_id)->blogname); ?>
                     </option>
                 <?php endforeach; ?>
             </select>
-            <input type="submit" name="change_site" class="button" value="Change Site">
+            <input type="submit" name="change_site" class="button" value="Change Reference Site">
 
-            <p>Select the pages and fields you want to generate content for:</p>
-            <?php foreach ($pages as $page): ?>
-                <h3>
-                    <label>
-                        <input type="checkbox" name="generate_fields[<?php echo esc_attr($page->ID); ?>]" value="all">
-                        <?php echo esc_html($page->post_title); ?>
-                    </label>
-                </h3>
-                <div style="margin-left: 20px;">
-                    <?php
-                    $fields = get_fields($page->ID);
-                    if ($fields): ?>
-                        <ul>
-                        <?php foreach ($fields as $field_name => $field_value): 
-                            $field_object = get_field_object($field_name, $page->ID);
-                            ?>
-                            <li>
-                                <?php echo esc_html($field_name); ?> (<?php echo esc_html($field_object['type']); ?>)
-                            </li>
-                        <?php endforeach; ?>
-                        </ul>
-                    <?php else: ?>
-                        <p>No custom fields found for this page.</p>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
+            <div class="site-comparison" style="margin-top: 20px;">
+                <table class="widefat fixed" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Page</th>
+                            <th>Reference Site (<?php echo esc_html($reference_site_data['name']); ?>)</th>
+                            <th>Current Site (<?php echo esc_html($current_site_data['name']); ?>)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php render_site_comparison($reference_site_data, $current_site_data); ?>
+                    </tbody>
+                </table>
+            </div>
+
             <p><input type="submit" name="ai_generate_content" class="button button-primary" value="Generate Content"></p>
         </form>
     </div>
     <?php
 
-    // Restore the current site
-    restore_current_blog();
-
     if (isset($_POST['ai_generate_content']) && check_admin_referer('ai_content_generator_action', 'ai_content_generator_nonce')) {
         if (isset($_POST['generate_fields']) && is_array($_POST['generate_fields'])) {
-            $generated_content = process_content_generation($_POST['generate_fields'], $current_site_id);
+            $generated_content = process_content_generation($_POST['generate_fields'], $current_site_id, $reference_site_id);
             
             // Save the generated content
             switch_to_blog($current_site_id);
@@ -216,8 +207,8 @@ function ai_content_generator_handle_api_key() {
     }
 }
 
-function process_content_generation($selected_fields, $site_id) {
-    switch_to_blog($site_id);
+function process_content_generation($selected_fields, $current_site_id, $reference_site_id) {
+    switch_to_blog($current_site_id);
     $content_mapping = get_dynamic_content_mapping();
     $generated_content = [];
 
@@ -351,4 +342,66 @@ function render_field_list($fields, $parent_key, $indent = 0) {
             echo esc_html($field_data['label']) . ' (' . esc_html($field_data['type']) . ')<br>';
         }
     }
+}
+
+function get_site_data($site_id) {
+    switch_to_blog($site_id);
+    $site_data = array(
+        'id' => $site_id,
+        'name' => get_bloginfo('name'),
+        'pages' => get_pages(['sort_column' => 'menu_order', 'sort_order' => 'asc']),
+    );
+    restore_current_blog();
+    return $site_data;
+}
+
+function render_site_comparison($reference_site_data, $current_site_data) {
+    $all_pages = array_merge($reference_site_data['pages'], $current_site_data['pages']);
+    $unique_pages = array_unique($all_pages, SORT_REGULAR);
+
+    foreach ($unique_pages as $page) {
+        echo '<tr>';
+        echo '<td>';
+        echo '<input type="checkbox" name="generate_fields[' . esc_attr($page->ID) . ']" value="all">';
+        echo ' <strong>' . esc_html($page->post_title) . '</strong>';
+        echo '</td>';
+        echo '<td>' . render_page_fields($page->ID, $reference_site_data) . '</td>';
+        echo '<td>' . render_page_fields($page->ID, $current_site_data) . '</td>';
+        echo '</tr>';
+    }
+}
+
+function render_page_fields($page_id, $site_data) {
+    switch_to_blog($site_data['id']);
+    
+    $output = '';
+    $page_exists = false;
+
+    foreach ($site_data['pages'] as $site_page) {
+        if ($site_page->ID == $page_id) {
+            $page_exists = true;
+            $fields = get_fields($page_id);
+            if ($fields) {
+                $output .= '<ul>';
+                foreach ($fields as $field_name => $field_value) {
+                    $field_object = get_field_object($field_name, $page_id);
+                    $output .= '<li>';
+                    $output .= esc_html($field_name) . ' (' . esc_html($field_object['type']) . '): ';
+                    $output .= !empty($field_value) ? '✅' : '❌';
+                    $output .= '</li>';
+                }
+                $output .= '</ul>';
+            } else {
+                $output .= '<p>No custom fields found for this page.</p>';
+            }
+            break;
+        }
+    }
+
+    if (!$page_exists) {
+        $output = '<p>Page does not exist in this site.</p>';
+    }
+
+    restore_current_blog();
+    return $output;
 }

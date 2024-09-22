@@ -4,6 +4,20 @@
 
 The AI Content Generator is a tool designed to automate content creation for multisite WordPress installations. It allows users to copy and adapt content from a main site to other sites in the network using AI technology.
 
+### Current Progress
+
+1. **Multisite Integration**
+   - Implemented a dropdown to select sites within the multisite network
+   - Pages and custom fields are now fetched based on the selected site
+
+2. **Page and Custom Field Display**
+   - Added functionality to list all pages for the selected site
+   - Implemented display of custom fields (including ACF fields) for each page
+
+3. **Basic UI Structure**
+   - Created a form for API key management and testing
+   - Implemented a form for selecting pages and fields for content generation
+
 ### Next Steps
 
 1. **Implement AI Integration**
