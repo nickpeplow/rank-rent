@@ -46,6 +46,8 @@ get_template_part('template-parts/homepage-hero', null, array(
     'background_image' => 'https://placehold.co/1600x400'
 ));
 ?>
+
+
     <?php get_template_part('template-parts/homepage', 'services'); ?>
 
     <?php get_template_part('template-parts/homepage', 'why-choose-us'); ?>

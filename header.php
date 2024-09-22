@@ -36,7 +36,7 @@
         ?>
       </div>
       <div class="col-md-3 text-center text-md-end order-md-3 order-3">
-        <a href="<?php echo esc_url(get_theme_mod('header_cta_link', '#')); ?>" class="btn btn-success btn-lg text-white px-4 py-2 fs-5">
+        <a href="/contact" class="btn btn-success btn-lg text-white px-4 py-2 fs-5">
           <?php echo get_theme_mod('header_cta_text', 'Request a Service'); ?>
         </a>
       </div>

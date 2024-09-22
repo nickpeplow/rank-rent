@@ -6,17 +6,28 @@
  * @param string $subtitle The hero subtitle (optional)
  * @param string $background_image The background image URL (optional)
  */
+ 
+$hero_data = get_field('hero');
+$hero_subheading = $hero_data['hero_subheading'] ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar.';
 
-$title = $args['title'] ?? get_the_title();
-$subtitle = $args['subtitle'] ?? '';
-$hero_data = get_field('homepage_hero') ?: [];
-$background_image = $hero_data['hero_background_image']['url'] ?? 'https://placehold.co/1600x400';
-$hero_heading = $hero_data['hero_heading'] ?? 'Welcome to Our Site';
-$hero_subheading = $hero_data['hero_subheading'] ?? 'Discover our amazing services';
+$background_image = $hero_data['hero_background_image'] ?? null;
+
+// Handle image whether it's an ID, an array, or not set
+if (is_array($background_image) && isset($background_image['ID'])) {
+    $background_image_url = wp_get_attachment_image_url($background_image['ID'], 'full');
+} elseif (is_numeric($background_image)) {
+    $background_image_url = wp_get_attachment_image_url($background_image, 'full');
+} else {
+    $background_image_url = 'https://placehold.co/1600x400';
+}
+
+$location = get_option('site_location', '');
+$site_niche = ranknrent_get_site_niche_name();
+$hero_heading = $location.' '.$site_niche;
 
 ?>
 
-<div class="hero-section" style="background-image: url('<?php echo esc_url($background_image); ?>');">
+<div class="hero-section" style="background-image: url('<?php echo esc_url($background_image_url); ?>');">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">

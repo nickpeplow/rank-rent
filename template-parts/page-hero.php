@@ -36,6 +36,14 @@ $hero_class = $template ? "hero-section hero-{$template}" : "hero-section";
                     <?php if ($subtitle) : ?>
                         <p class="lead"><?php echo esc_html($subtitle); ?></p>
                     <?php endif; ?>
+                <?php elseif ($template === 'services') : ?>
+                    <h1 class="display-4">
+                        <span class="h6 text-uppercase d-block mb-0"><?php echo esc_html(get_option('site_location', '')); ?> <?= ranknrent_get_site_niche_name(); ?></span>
+                        <span class="services-title"><?php echo esc_html($title); ?></span>
+                    </h1>
+                    <?php if ($subtitle) : ?>
+                        <p class="lead"><?php echo esc_html($subtitle); ?></p>
+                    <?php endif; ?>
                 <?php else : ?>
                     <h6 class="text-uppercase"><?php echo esc_html(get_option('site_location', '')); ?></h6>
                     <h1 class="display-4">
