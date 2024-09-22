@@ -5,6 +5,9 @@ require get_template_directory() . '/inc/post-types.php';
 // Include the multisite settings file
 require_once get_template_directory() . '/inc/multisite.php';
 
+// Near the top of your functions.php file
+require_once get_template_directory() . '/inc/ai-content-generator.php';
+
 function rankandrent_setup() {
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
