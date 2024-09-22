@@ -208,197 +208,140 @@ function ai_content_generator_handle_api_key() {
 }
 
 function process_content_generation($selected_fields, $current_site_id, $reference_site_id) {
-    switch_to_blog($current_site_id);
-    $content_mapping = get_dynamic_content_mapping();
     $generated_content = [];
 
-    foreach ($selected_fields as $content_type => $value) {
-        if ($value === 'all') {
-            // For post types
-            if (post_type_exists($content_type)) {
-                $posts = get_posts(array('post_type' => $content_type, 'posts_per_page' => -1));
-                foreach ($posts as $post) {
-                    foreach ($content_mapping[$content_type]['fields'] as $field_key => $field_data) {
-                        $original_content = get_field($field_key, $post->ID);
-                        
-                        $generated_content[$content_type][$post->ID][$field_key] = generate_field_content(
-                            $field_data['label'],
-                            $field_data['type'],
-                            $original_content,
-                            $content_mapping[$content_type]['title']
-                        );
-                    }
-                }
+    // Switch to the reference site to get page data
+    switch_to_blog($reference_site_id);
+    
+    foreach ($selected_fields as $page_id => $value) {
+        $reference_page = get_post($page_id);
+        if (!$reference_page || $reference_page->post_status !== 'publish') {
+            continue; // Skip if the page doesn't exist or isn't published in the reference site
+        }
+
+        $page_template = get_page_template_slug($page_id);
+
+        // Switch to the current site to check/create the page
+        restore_current_blog();
+        switch_to_blog($current_site_id);
+
+        // Check if the page exists in the current site
+        $current_page = get_page_by_path($reference_page->post_name);
+
+        if (!$current_page) {
+            // Create the page if it doesn't exist
+            $author_id = $reference_page->post_author;
+            if (!get_user_by('id', $author_id)) {
+                // If the author doesn't exist in the current site, use the current user
+                $author_id = get_current_user_id();
             }
-            // For specific pages (if needed)
-            elseif (strpos($content_type, 'page_') === 0) {
-                $template_name = str_replace('page_', '', $content_type);
-                $pages = get_pages(array('meta_key' => '_wp_page_template', 'meta_value' => $template_name));
-                foreach ($pages as $page) {
-                    foreach ($content_mapping[$content_type]['fields'] as $field_key => $field_data) {
-                        $original_content = get_field($field_key, $page->ID);
-                        
-                        $generated_content[$content_type][$page->ID][$field_key] = generate_field_content(
-                            $field_data['label'],
-                            $field_data['type'],
-                            $original_content,
-                            $content_mapping[$content_type]['title']
-                        );
-                    }
-                }
+
+            $new_page_id = wp_insert_post([
+                'post_title'    => $reference_page->post_title,
+                'post_name'     => $reference_page->post_name,
+                'post_content'  => '',
+                'post_status'   => 'publish',
+                'post_type'     => 'page',
+                'post_author'   => $author_id,
+            ]);
+
+            if ($new_page_id) {
+                // Set the same template as the reference page
+                update_post_meta($new_page_id, '_wp_page_template', $page_template);
+                $current_page = get_post($new_page_id);
             }
         }
+
+        if ($current_page) {
+            $generated_content[$current_page->ID] = generate_page_content($reference_page, $current_page);
+        }
+
+        // Switch back to the reference site for the next iteration
+        restore_current_blog();
+        switch_to_blog($reference_site_id);
     }
 
+    // Ensure we're back on the current site before returning
     restore_current_blog();
+    switch_to_blog($current_site_id);
+
     return $generated_content;
 }
 
-function get_acf_fields_for_post_type($post_type) {
-    $field_groups = acf_get_field_groups(array('post_type' => $post_type));
-    $fields = array();
+function generate_page_content($reference_page, $current_page) {
+    $generated_fields = [];
 
-    foreach ($field_groups as $field_group) {
-        $group_fields = acf_get_fields($field_group);
-        foreach ($group_fields as $field) {
-            $fields[$field['name']] = array(
-                'label' => $field['label'],
-                'type' => $field['type']
-            );
+    // Get custom fields from the reference page
+    $reference_fields = get_fields($reference_page->ID);
+
+    if ($reference_fields) {
+        foreach ($reference_fields as $field_name => $field_value) {
+            // Here you would call your AI service to generate content
+            // For now, we'll just copy the content from the reference page
+            $generated_fields[$field_name] = $field_value;
         }
     }
 
-    return $fields;
-}
-
-function get_dynamic_content_mapping() {
-    $post_types = get_post_types(['public' => true], 'objects');
-    $mapping = [];
-
-    foreach ($post_types as $post_type) {
-        $field_groups = acf_get_field_groups(['post_type' => $post_type->name]);
-        if (!empty($field_groups)) {
-            $mapping[$post_type->name] = [
-                'title' => $post_type->labels->singular_name,
-                'fields' => []
-            ];
-            foreach ($field_groups as $field_group) {
-                $fields = acf_get_fields($field_group);
-                $mapping[$post_type->name]['fields'] += process_fields($fields);
-            }
-        }
-    }
-
-    // Add support for specific page templates
-    $page_templates = get_page_templates();
-    foreach ($page_templates as $template_name => $template_filename) {
-        $field_groups = acf_get_field_groups(['page_template' => $template_filename]);
-        if (!empty($field_groups)) {
-            $mapping['page_' . sanitize_title($template_name)] = [
-                'title' => $template_name,
-                'fields' => []
-            ];
-            foreach ($field_groups as $field_group) {
-                $fields = acf_get_fields($field_group);
-                $mapping['page_' . sanitize_title($template_name)]['fields'] += process_fields($fields);
-            }
-        }
-    }
-
-    return $mapping;
-}
-
-function process_fields($fields, $prefix = '') {
-    $processed_fields = [];
-
-    foreach ($fields as $field) {
-        $field_key = $prefix . $field['name'];
-        
-        if ($field['type'] === 'group') {
-            $processed_fields[$field_key] = [
-                'label' => $field['label'],
-                'type' => 'group',
-                'sub_fields' => process_fields($field['sub_fields'], $field_key . '_')
-            ];
-        } else {
-            $processed_fields[$field_key] = [
-                'label' => $field['label'],
-                'type' => $field['type']
-            ];
-        }
-    }
-
-    return $processed_fields;
-}
-
-function render_field_list($fields, $parent_key, $indent = 0) {
-    foreach ($fields as $field_key => $field_data) {
-        $full_key = $parent_key . '[' . $field_key . ']';
-        echo str_repeat('&nbsp;', $indent * 4);
-        if ($field_data['type'] === 'group') {
-            echo '<strong>' . esc_html($field_data['label']) . ' (group):</strong><br>';
-            render_field_list($field_data['sub_fields'], $full_key, $indent + 1);
-        } else {
-            echo esc_html($field_data['label']) . ' (' . esc_html($field_data['type']) . ')<br>';
-        }
-    }
+    return $generated_fields;
 }
 
 function get_site_data($site_id) {
     switch_to_blog($site_id);
+    $query = new WP_Query([
+        'post_type' => 'page',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'orderby' => 'menu_order',
+        'order' => 'ASC',
+    ]);
     $site_data = array(
         'id' => $site_id,
         'name' => get_bloginfo('name'),
-        'pages' => get_pages(['sort_column' => 'menu_order', 'sort_order' => 'asc']),
+        'pages' => $query->posts,
     );
     restore_current_blog();
     return $site_data;
 }
 
 function render_site_comparison($reference_site_data, $current_site_data) {
-    $all_pages = array_merge($reference_site_data['pages'], $current_site_data['pages']);
-    $unique_pages = array_unique($all_pages, SORT_REGULAR);
-
-    foreach ($unique_pages as $page) {
+    foreach ($reference_site_data['pages'] as $reference_page) {
         echo '<tr>';
         echo '<td>';
-        echo '<input type="checkbox" name="generate_fields[' . esc_attr($page->ID) . ']" value="all">';
-        echo ' <strong>' . esc_html($page->post_title) . '</strong>';
+        echo '<input type="checkbox" name="generate_fields[' . esc_attr($reference_page->ID) . ']" value="all">';
+        echo ' <strong>' . esc_html($reference_page->post_title) . '</strong>';
         echo '</td>';
-        echo '<td>' . render_page_fields($page->ID, $reference_site_data) . '</td>';
-        echo '<td>' . render_page_fields($page->ID, $current_site_data) . '</td>';
+        echo '<td>' . render_page_fields($reference_page, $reference_site_data) . '</td>';
+        echo '<td>' . render_page_fields($reference_page, $current_site_data) . '</td>';
         echo '</tr>';
     }
 }
 
-function render_page_fields($page_id, $site_data) {
+function render_page_fields($reference_page, $site_data) {
     switch_to_blog($site_data['id']);
     
     $output = '';
     $page_exists = false;
 
-    foreach ($site_data['pages'] as $site_page) {
-        if ($site_page->ID == $page_id) {
-            $page_exists = true;
-            $fields = get_fields($page_id);
-            if ($fields) {
-                $output .= '<ul>';
-                foreach ($fields as $field_name => $field_value) {
-                    $field_object = get_field_object($field_name, $page_id);
-                    $output .= '<li>';
-                    $output .= esc_html($field_name) . ' (' . esc_html($field_object['type']) . '): ';
-                    $output .= !empty($field_value) ? '✅' : '❌';
-                    $output .= '</li>';
-                }
-                $output .= '</ul>';
-            } else {
-                $output .= '<p>No custom fields found for this page.</p>';
-            }
-            break;
-        }
-    }
+    // Find the matching page in the current site
+    $current_page = get_page_by_path($reference_page->post_name);
 
-    if (!$page_exists) {
+    if ($current_page) {
+        $page_exists = true;
+        $fields = get_fields($current_page->ID);
+        if ($fields) {
+            $output .= '<ul>';
+            foreach ($fields as $field_name => $field_value) {
+                $field_object = get_field_object($field_name, $current_page->ID);
+                $output .= '<li>';
+                $output .= esc_html($field_name) . ' (' . esc_html($field_object['type']) . '): ';
+                $output .= !empty($field_value) ? '✅' : '❌';
+                $output .= '</li>';
+            }
+            $output .= '</ul>';
+        } else {
+            $output .= '<p>No custom fields found for this page.</p>';
+        }
+    } else {
         $output = '<p>Page does not exist in this site.</p>';
     }
 
