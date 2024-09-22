@@ -30,7 +30,7 @@ function claude_api_call($prompt) {
         ],
         'body' => json_encode([
             'model' => 'claude-3-5-sonnet-20240620',
-            'max_tokens' => 1024,
+            'max_tokens' => 4096,  // Increased max_tokens
             'messages' => [
                 [
                     'role' => 'user',

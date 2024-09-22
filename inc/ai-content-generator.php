@@ -96,18 +96,27 @@ function ai_content_generator_render_page() {
 
     if (isset($_POST['ai_generate_content']) && check_admin_referer('ai_content_generator_action', 'ai_content_generator_nonce')) {
         if (isset($_POST['generate_fields']) && is_array($_POST['generate_fields'])) {
-            $generated_content = process_content_generation($_POST['generate_fields'], $current_site_id, $reference_site_id);
-            
-            // Save the generated content
-            switch_to_blog($current_site_id);
-            foreach ($generated_content as $page_id => $fields) {
-                foreach ($fields as $field_key => $content) {
-                    update_field($field_key, $content, $page_id);
+            foreach ($_POST['generate_fields'] as $page_id => $value) {
+                // Switch to the reference site to get the page
+                $reference_site_id = isset($_POST['reference_site_id']) ? intval($_POST['reference_site_id']) : get_main_site_id();
+                switch_to_blog($reference_site_id);
+                
+                $reference_page = get_post($page_id);
+                if (!$reference_page) {
+                    echo '<div class="notice notice-error"><p>Error: Could not find reference page with ID ' . esc_html($page_id) . ' on the reference site.</p></div>';
+                    restore_current_blog();
+                    continue;
                 }
+
+                // Switch back to the current site
+                restore_current_blog();
+
+                // We don't need to get the current page by slug at this point
+                // Just pass null for now, we'll handle creating/updating the page later
+                $current_page = null;
+
+                generate_page_content($reference_page, $current_page, $reference_site_id);
             }
-            restore_current_blog();
-            
-            echo '<div class="notice notice-success"><p>Content generated and saved successfully!</p></div>';
         } else {
             echo '<div class="notice notice-error"><p>Please select at least one page to generate content for.</p></div>';
         }
@@ -253,7 +262,7 @@ function process_content_generation($selected_fields, $current_site_id, $referen
         }
 
         if ($current_page) {
-            $generated_content[$current_page->ID] = generate_page_content($reference_page, $current_page);
+            $generated_content[$current_page->ID] = generate_page_content($reference_page, $current_page, $reference_site_id);
         }
 
         // Switch back to the reference site for the next iteration
@@ -268,22 +277,83 @@ function process_content_generation($selected_fields, $current_site_id, $referen
     return $generated_content;
 }
 
-function generate_page_content($reference_page, $current_page) {
-    $generated_fields = [];
-
-    $field_groups = acf_get_field_groups(array('post_id' => $reference_page->ID));
-    
-    foreach ($field_groups as $field_group) {
-        $fields = acf_get_fields($field_group['key']);
-        foreach ($fields as $field) {
-            $field_value = get_field($field['key'], $reference_page->ID);
-            // Here you would call your AI service to generate content
-            // For now, we'll just copy the content from the reference page
-            $generated_fields[$field['key']] = $field_value;
-        }
+function generate_page_content($reference_page, $current_page, $reference_site_id) {
+    if (!$reference_page) {
+        echo '<div class="notice notice-error"><p>Error: Invalid reference page.</p></div>';
+        return [];
     }
 
-    return $generated_fields;
+    display_reference_page_content($reference_page, $reference_site_id);
+
+    // For now, we're just displaying the content, not generating anything
+    return [];
+}
+
+function display_reference_page_content($reference_page, $reference_site_id) {
+    echo "<div style='background-color: #f0f0f0; padding: 20px; margin: 20px 0; border: 1px solid #ccc;'>";
+    echo "<h2>Content from Reference Page: " . esc_html($reference_page->post_title) . "</h2>";
+    echo "<p>Reference Page ID: " . esc_html($reference_page->ID) . "</p>";
+    echo "<p>Reference Page Slug: " . esc_html($reference_page->post_name) . "</p>";
+
+    echo "<p>Current Site ID: " . esc_html($reference_site_id) . "</p>";
+    switch_to_blog($reference_site_id);
+
+    $fields = get_fields($reference_page->ID);
+
+    if (!$fields) {
+        echo "<p>No ACF fields found for this page.</p>";
+    } else {
+        echo "<ul>";
+        display_fields_recursive($fields);
+        echo "</ul>";
+    }
+
+    restore_current_blog();
+
+    echo "</div>";
+}
+
+function display_fields_recursive($fields, $parent_key = '') {
+    foreach ($fields as $field_name => $field_value) {
+        $full_field_name = $parent_key ? $parent_key . '_' . $field_name : $field_name;
+        $field_object = get_field_object($full_field_name);
+
+        // Skip image fields or fields containing image data
+        if (is_image_field($field_object, $field_value)) {
+            continue;
+        }
+
+        echo "<li><strong>" . esc_html($field_name) . ":</strong> ";
+
+        if (is_array($field_value) && !isset($field_value['type'])) {
+            echo "<ul>";
+            display_fields_recursive($field_value, $full_field_name);
+            echo "</ul>";
+        } else {
+            echo esc_html(is_array($field_value) ? json_encode($field_value) : $field_value);
+        }
+
+        echo "</li>";
+    }
+}
+
+function is_image_field($field_object, $field_value) {
+    // Check if it's an image field type
+    if ($field_object && $field_object['type'] === 'image') {
+        return true;
+    }
+
+    // Check if it's an array containing image data
+    if (is_array($field_value) && isset($field_value['type']) && $field_value['type'] === 'image') {
+        return true;
+    }
+
+    // Check if it's a nested array containing image data
+    if (is_array($field_value) && isset($field_value['sizes']) && isset($field_value['url'])) {
+        return true;
+    }
+
+    return false;
 }
 
 function get_site_data($site_id) {
