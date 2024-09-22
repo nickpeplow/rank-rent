@@ -271,14 +271,15 @@ function process_content_generation($selected_fields, $current_site_id, $referen
 function generate_page_content($reference_page, $current_page) {
     $generated_fields = [];
 
-    // Get custom fields from the reference page
-    $reference_fields = get_fields($reference_page->ID);
-
-    if ($reference_fields) {
-        foreach ($reference_fields as $field_name => $field_value) {
+    $field_groups = acf_get_field_groups(array('post_id' => $reference_page->ID));
+    
+    foreach ($field_groups as $field_group) {
+        $fields = acf_get_fields($field_group['key']);
+        foreach ($fields as $field) {
+            $field_value = get_field($field['key'], $reference_page->ID);
             // Here you would call your AI service to generate content
             // For now, we'll just copy the content from the reference page
-            $generated_fields[$field_name] = $field_value;
+            $generated_fields[$field['key']] = $field_value;
         }
     }
 
@@ -327,14 +328,16 @@ function render_page_fields($reference_page, $site_data) {
 
     if ($current_page) {
         $page_exists = true;
-        $fields = get_fields($current_page->ID);
-        if ($fields) {
+        $field_groups = acf_get_field_groups(array('post_id' => $current_page->ID));
+        
+        if ($field_groups) {
             $output .= '<ul>';
-            foreach ($fields as $field_name => $field_value) {
-                $field_object = get_field_object($field_name, $current_page->ID);
-                $output .= '<li>';
-                $output .= esc_html($field_name) . ' (' . esc_html($field_object['type']) . '): ';
-                $output .= !empty($field_value) ? '✅' : '❌';
+            foreach ($field_groups as $field_group) {
+                $output .= '<li>' . esc_html($field_group['title']) . ':';
+                $fields = acf_get_fields($field_group['key']);
+                if ($fields) {
+                    $output .= render_fields_recursive($fields, $current_page->ID);
+                }
                 $output .= '</li>';
             }
             $output .= '</ul>';
@@ -346,5 +349,26 @@ function render_page_fields($reference_page, $site_data) {
     }
 
     restore_current_blog();
+    return $output;
+}
+
+function render_fields_recursive($fields, $post_id, $parent_field = '') {
+    $output = '<ul>';
+    foreach ($fields as $field) {
+        $field_name = $parent_field ? $parent_field . '_' . $field['name'] : $field['name'];
+        $field_value = get_field($field_name, $post_id);
+        
+        $output .= '<li>';
+        $output .= esc_html($field['label']) . ' (' . esc_html($field['type']) . '): ';
+        
+        if ($field['type'] === 'group') {
+            $output .= render_fields_recursive($field['sub_fields'], $post_id, $field_name);
+        } else {
+            $output .= !empty($field_value) ? '✅' : '❌';
+        }
+        
+        $output .= '</li>';
+    }
+    $output .= '</ul>';
     return $output;
 }
