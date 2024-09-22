@@ -1,0 +1,32 @@
+/*
+Theme Name: Rank and Rent
+Theme URI: http://example.com/rankandrent/
+Author: Your Name
+Author URI: http://example.com
+Description: A custom theme for Rank and Rent websites
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: rankandrent
+*/
+
+/* Add your custom styles here */
+
+.navbar-nav .nav-link:hover {
+    text-decoration: underline;
+}
+
+/* New custom class for thicker border */
+.border-thick {
+    border-width: 3px !important;
+}
+
+/* Increase the base font size */
+:root {
+    font-size: 18px; /* Adjust this value as needed */
+}
+
+body {
+    /* Ensure the body inherits the root font size */
+    font-size: 1rem;
+}
