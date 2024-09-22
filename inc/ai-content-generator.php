@@ -319,21 +319,28 @@ function process_field_group($field_group, $post_id) {
     $group_instructions = array();
 
     foreach ($fields as $field) {
-        // Skip the field if its name contains "image"
         if (stripos($field['name'], 'image') !== false) {
             continue;
         }
 
         $field_value = get_field($field['name'], $post_id);
         
-        // If the field value is an array, recursively filter it
         if (is_array($field_value)) {
-            $field_value = array_filter($field_value, function($key) {
-                return stripos($key, 'image') === false;
-            }, ARRAY_FILTER_USE_KEY);
-        }
-
-        if (!empty($field_value)) {
+            $filtered_value = array();
+            $filtered_instructions = array();
+            foreach ($field_value as $subfield_name => $subfield_value) {
+                if (stripos($subfield_name, 'image') === false) {
+                    $filtered_value[$subfield_name] = $subfield_value;
+                    // Get instructions for subfields
+                    $subfield = acf_get_field($subfield_name);
+                    $filtered_instructions[$subfield_name] = $subfield['instructions'] ?? '';
+                }
+            }
+            if (!empty($filtered_value)) {
+                $group_content[$field['name']] = $filtered_value;
+                $group_instructions[$field['name']] = $filtered_instructions;
+            }
+        } else {
             $group_content[$field['name']] = $field_value;
             $group_instructions[$field['name']] = $field['instructions'] ?? '';
         }
@@ -343,6 +350,8 @@ function process_field_group($field_group, $post_id) {
         echo "<h2>Field Group: " . esc_html($field_group['title']) . "</h2>";
         echo "<h3>Filtered Content (Debug):</h3>";
         echo "<pre>" . esc_html(json_encode($group_content, JSON_PRETTY_PRINT)) . "</pre>";
+        echo "<h3>Field Instructions (Debug):</h3>";
+        echo "<pre>" . esc_html(json_encode($group_instructions, JSON_PRETTY_PRINT)) . "</pre>";
         preview_claude_api_call($field_group['title'], $group_content, $group_instructions);
         $generated_content = generate_claude_content($field_group['title'], $group_content, $group_instructions);
         echo "<h3>Generated Content:</h3>";
@@ -358,7 +367,16 @@ function preview_claude_api_call($group_name, $original_content, $instructions) 
     
     $prompt .= "\n\nField Instructions:";
     foreach ($instructions as $field_name => $instruction) {
-        $prompt .= "\n{$field_name}: {$instruction}";
+        if (is_array($instruction)) {
+            $prompt .= "\n{$field_name}:";
+            foreach ($instruction as $subfield_name => $subfield_instruction) {
+                if (!empty($subfield_instruction)) {
+                    $prompt .= "\n  {$subfield_name}: {$subfield_instruction}";
+                }
+            }
+        } elseif (!empty($instruction)) {
+            $prompt .= "\n{$field_name}: {$instruction}";
+        }
     }
     
     $prompt .= "\n\nHere's the original content:\n\n" . json_encode($original_content, JSON_PRETTY_PRINT);
@@ -392,7 +410,16 @@ function generate_claude_content($group_name, $original_content, $instructions) 
     
     $prompt .= "\n\nField Instructions:";
     foreach ($instructions as $field_name => $instruction) {
-        $prompt .= "\n{$field_name}: {$instruction}";
+        if (is_array($instruction)) {
+            $prompt .= "\n{$field_name}:";
+            foreach ($instruction as $subfield_name => $subfield_instruction) {
+                if (!empty($subfield_instruction)) {
+                    $prompt .= "\n  {$subfield_name}: {$subfield_instruction}";
+                }
+            }
+        } elseif (!empty($instruction)) {
+            $prompt .= "\n{$field_name}: {$instruction}";
+        }
     }
     
     $prompt .= "\n\nHere's the original content:\n\n" . json_encode($original_content, JSON_PRETTY_PRINT);
