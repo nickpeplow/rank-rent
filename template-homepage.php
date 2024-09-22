@@ -52,9 +52,9 @@ get_template_part('template-parts/homepage-hero', null, array(
 
     <?php get_template_part('template-parts/homepage', 'testimonials'); ?>
 
-    <?php get_template_part('template-parts/homepage', 'info'); ?>
+    <?php //get_template_part('template-parts/homepage', 'info'); ?>
 
-    <?php get_template_part('template-parts/homepage', 'locations'); ?>
+    <?php //get_template_part('template-parts/homepage', 'locations'); ?>
 
 </main>
 
