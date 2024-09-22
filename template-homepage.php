@@ -14,7 +14,7 @@ get_header();
     background-size: cover;
     background-position: center;
     color: white;
-    padding: 100px 0;
+    padding: 50px 0;
     position: relative;
 }
 .hero-section::before {

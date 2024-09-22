@@ -23,7 +23,8 @@ if (is_array($background_image) && isset($background_image['ID'])) {
 
 $location = get_option('site_location', '');
 $site_niche = ranknrent_get_site_niche_name();
-$hero_heading = $location.' '.$site_niche;
+$hero_heading = "Professional and Affordable $site_niche in $location";
+
 
 ?>
 
@@ -32,25 +33,8 @@ $hero_heading = $location.' '.$site_niche;
         <div class="row">
             <div class="col-lg-8">
                 <h1 class="display-4"><?php echo esc_html($hero_heading); ?></h1>
-                <p class="lead mb-2"><?php echo esc_html($hero_subheading); ?></p>
-                <ul class="lead two-column-list">
-                    <?php
-                    $services = get_posts(array(
-                        'post_type' => 'services',
-                        'posts_per_page' => 6,
-                        'orderby' => 'title',
-                        'order' => 'ASC'
-                    ));
-                    if ($services) {
-                        foreach ($services as $service) {
-                            echo '<li>' . esc_html($service->post_title) . '</li>';
-                        }
-                    } else {
-                        echo '<li>Service 1</li><li>Service 2</li><li>Service 3</li><li>Service 4</li><li>Service 5</li><li>Service 6</li>';
-                    }
-                    ?>
-                </ul>
-                <a href="/services" class="btn btn-success btn-lg mt-2">View All Services</a>
+                <p class="lead mb-4"><?php echo esc_html($hero_subheading); ?></p>
+                <a href="/services" class="btn btn-success btn-lg">View All Services</a>
             </div>
         </div>
     </div>

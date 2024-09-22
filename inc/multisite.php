@@ -45,9 +45,10 @@ if (!function_exists('ranknrent_add_settings_menu')) {
             if ($setup_result) {
                 $niche = ranknrent_get_niche_details(ranknrent_get_site_niche());
                 $service_count = count($niche['services']);
-                echo '<div class="notice notice-success"><p>Site setup completed successfully! Created ' . $service_count . ' service posts for the ' . esc_html($niche['name']) . ' niche.</p></div>';
+                $site_location = get_option('site_location', ''); // Get the site location
+                echo '<div class="notice notice-success"><p>Site setup completed successfully! Created ' . $service_count . ' service posts for the ' . esc_html($niche['name']) . ' niche in ' . esc_html($site_location) . '.</p></div>';
             } else {
-                echo '<div class="notice notice-error"><p>There was an error during site setup. Please make sure you have selected a niche and try again.</p></div>';
+                echo '<div class="notice notice-error"><p>There was an error during site setup. Please make sure you have selected a niche and location, then try again.</p></div>';
             }
         }
     }
@@ -221,4 +222,34 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         $niche = ranknrent_get_niche_details($niche_slug);
         return $niche ? $niche['name'] : '';
     }
+
+    // Add this new function to create a shortcode for site location
+    function ranknrent_site_location_shortcode() {
+        return esc_html(get_option('site_location', ''));
+    }
+    add_shortcode('site_location', 'ranknrent_site_location_shortcode');
+
+    // Function to replace [site_location] in content
+    function ranknrent_replace_site_location($content) {
+        $site_location = esc_html(get_option('site_location', ''));
+        return str_replace('[site_location]', $site_location, $content);
+    }
+
+    // Add filters to apply the replacement
+    add_filter('the_content', 'ranknrent_replace_site_location');
+    add_filter('the_title', 'ranknrent_replace_site_location');
+    add_filter('widget_text_content', 'ranknrent_replace_site_location');
+    add_filter('the_excerpt', 'ranknrent_replace_site_location');
+
+    // Apply the filter to all text widgets
+    add_filter('widget_text', 'ranknrent_replace_site_location');
+
+    // Apply the filter to navigation menu items
+    add_filter('nav_menu_item_title', 'ranknrent_replace_site_location');
+
+    // Optional: Apply the filter to custom fields
+    add_filter('acf/load_value', 'ranknrent_replace_site_location');
+
+    // Optional: If you want to allow shortcodes in titles
+    add_filter('the_title', 'do_shortcode');
 }

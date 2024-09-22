@@ -111,9 +111,12 @@ function ai_content_generator_render_page() {
                 // Switch back to the current site
                 restore_current_blog();
 
-                // We don't need to get the current page by slug at this point
-                // Just pass null for now, we'll handle creating/updating the page later
-                $current_page = null;
+                // Get the current page by slug
+                $current_page = get_page_by_path($reference_page->post_name);
+
+                if (!$current_page) {
+                    echo '<div class="notice notice-warning"><p>Warning: Page "' . esc_html($reference_page->post_title) . '" does not exist on the current site. It will be created.</p></div>';
+                }
 
                 generate_page_content($reference_page, $current_page, $reference_site_id);
             }
@@ -283,13 +286,66 @@ function generate_page_content($reference_page, $current_page, $reference_site_i
         return [];
     }
 
-    display_reference_page_content($reference_page, $reference_site_id);
+    $generated_content = display_reference_page_content($reference_page, $reference_site_id);
 
-    // For now, we're just displaying the content, not generating anything
-    return [];
+    if (empty($generated_content) || !is_array($generated_content)) {
+        echo '<div class="notice notice-error"><p>Error: No content was generated.</p></div>';
+        return [];
+    }
+
+    // Ensure we're on the current site
+    $current_site_id = get_current_blog_id();
+    switch_to_blog($current_site_id);
+
+    $updated_fields = [];
+
+    // If $current_page is null, create a new page
+    if (!$current_page) {
+        $new_page_id = wp_insert_post([
+            'post_title'    => $reference_page->post_title,
+            'post_name'     => $reference_page->post_name,
+            'post_content'  => '',
+            'post_status'   => 'publish',
+            'post_type'     => 'page',
+            'post_author'   => get_current_user_id(),
+        ]);
+
+        if ($new_page_id) {
+            $current_page = get_post($new_page_id);
+            echo '<div class="notice notice-success"><p>New page created: ' . esc_html($reference_page->post_title) . '</p></div>';
+        } else {
+            echo '<div class="notice notice-error"><p>Failed to create new page.</p></div>';
+            restore_current_blog();
+            return [];
+        }
+    }
+
+    foreach ($generated_content as $field_group => $fields) {
+        foreach ($fields as $field_name => $new_value) {
+            // Update the ACF field
+            $update_result = update_field($field_name, $new_value, $current_page->ID);
+            
+            if ($update_result) {
+                $updated_fields[] = $field_name;
+            } else {
+                echo '<div class="notice notice-warning"><p>Warning: Failed to update field "' . esc_html($field_name) . '".</p></div>';
+            }
+        }
+    }
+
+    // Switch back to the original site
+    restore_current_blog();
+
+    if (!empty($updated_fields)) {
+        echo '<div class="notice notice-success"><p>Successfully updated fields: ' . esc_html(implode(', ', $updated_fields)) . '</p></div>';
+    }
+
+    return $generated_content;
 }
 
 function display_reference_page_content($reference_page, $reference_site_id) {
+    $generated_content = [];
+
     echo "<div style='background-color: #f0f0f0; padding: 20px; margin: 20px 0; border: 1px solid #ccc;'>";
     echo "<h2>Content from Reference Page: " . esc_html($reference_page->post_title) . "</h2>";
     echo "<p>Reference Page ID: " . esc_html($reference_page->ID) . "</p>";
@@ -304,13 +360,18 @@ function display_reference_page_content($reference_page, $reference_site_id) {
         echo "<p>No ACF field groups found for this page.</p>";
     } else {
         foreach ($field_groups as $field_group) {
-            process_field_group($field_group, $reference_page->ID);
+            $group_content = process_field_group($field_group, $reference_page->ID);
+            if (!empty($group_content)) {
+                $generated_content[$field_group['title']] = $group_content;
+            }
         }
     }
 
     restore_current_blog();
 
     echo "</div>";
+
+    return $generated_content;
 }
 
 function process_field_group($field_group, $post_id) {
@@ -319,7 +380,7 @@ function process_field_group($field_group, $post_id) {
     $group_instructions = array();
 
     foreach ($fields as $field) {
-        if (stripos($field['name'], 'image') !== false) {
+        if (stripos($field['name'], 'image') !== false || stripos($field['name'], 'avatar') !== false) {
             continue;
         }
 
@@ -329,7 +390,7 @@ function process_field_group($field_group, $post_id) {
             $filtered_value = array();
             $filtered_instructions = array();
             foreach ($field_value as $subfield_name => $subfield_value) {
-                if (stripos($subfield_name, 'image') === false) {
+                if (stripos($subfield_name, 'image') === false && stripos($subfield_name, 'avatar') === false) {
                     $filtered_value[$subfield_name] = $subfield_value;
                     // Get instructions for subfields
                     $subfield = acf_get_field($subfield_name);
@@ -355,11 +416,13 @@ function process_field_group($field_group, $post_id) {
         preview_claude_api_call($field_group['title'], $group_content, $group_instructions);
         $generated_content = generate_claude_content($field_group['title'], $group_content, $group_instructions);
         echo "<h3>Generated Content:</h3>";
-        echo "<pre>" . esc_html($generated_content) . "</pre>";
+        echo "<pre>" . esc_html(json_encode($generated_content, JSON_PRETTY_PRINT)) . "</pre>";
+        return $generated_content;
     } else {
         echo "<p>No non-image fields found in this group.</p>";
     }
     echo "<hr>";
+    return [];
 }
 
 function preview_claude_api_call($group_name, $original_content, $instructions) {
@@ -371,16 +434,18 @@ function preview_claude_api_call($group_name, $original_content, $instructions) 
             $prompt .= "\n{$field_name}:";
             foreach ($instruction as $subfield_name => $subfield_instruction) {
                 if (!empty($subfield_instruction)) {
-                    $prompt .= "\n  {$subfield_name}: {$subfield_instruction}";
+                    $prompt .= "\n  {$subfield_name}: " . preg_replace('/\[.*?\]/', '', $subfield_instruction);
                 }
             }
         } elseif (!empty($instruction)) {
-            $prompt .= "\n{$field_name}: {$instruction}";
+            $prompt .= "\n{$field_name}: " . preg_replace('/\[.*?\]/', '', $instruction);
         }
     }
     
-    $prompt .= "\n\nHere's the original content:\n\n" . json_encode($original_content, JSON_PRETTY_PRINT);
-    $prompt .= "\n\nPlease provide the rewritten content for each field:";
+    $prompt .= "\n\nHere's the original content:\n\n" . json_encode(array_map(function($value) {
+        return is_string($value) ? preg_replace('/\[.*?\]/', '', $value) : $value;
+    }, $original_content), JSON_PRETTY_PRINT);
+    $prompt .= "\n\nPlease provide the rewritten content for each field. Format your response as a JSON object, where each key is the field name and each value is the rewritten content. Do not include any additional commentary or explanations outside of this JSON structure.";
     
     echo "<h3>Preview of Claude API Call for group: " . esc_html($group_name) . "</h3>";
     echo "<pre>";
@@ -406,7 +471,7 @@ function preview_claude_api_call($group_name, $original_content, $instructions) 
 }
 
 function generate_claude_content($group_name, $original_content, $instructions) {
-    $prompt = "You are an AI assistant for a local business website. Please rewrite the following content for the field group '{$group_name}', maintaining the same meaning but making it unique and suitable for a local business website.";
+    $prompt = "You are an AI assistant for a local business website. Please rewrite the following content for the field group '{$group_name}', maintaining the same meaning but making it unique and suitable for a local business website. Ignore any text within square brackets [] as these are placeholders.";
     
     $prompt .= "\n\nField Instructions:";
     foreach ($instructions as $field_name => $instruction) {
@@ -414,16 +479,19 @@ function generate_claude_content($group_name, $original_content, $instructions) 
             $prompt .= "\n{$field_name}:";
             foreach ($instruction as $subfield_name => $subfield_instruction) {
                 if (!empty($subfield_instruction)) {
-                    $prompt .= "\n  {$subfield_name}: {$subfield_instruction}";
+                    $prompt .= "\n  {$subfield_name}: " . preg_replace('/\[.*?\]/', '', $subfield_instruction);
                 }
             }
         } elseif (!empty($instruction)) {
-            $prompt .= "\n{$field_name}: {$instruction}";
+            $prompt .= "\n{$field_name}: " . preg_replace('/\[.*?\]/', '', $instruction);
         }
     }
     
-    $prompt .= "\n\nHere's the original content:\n\n" . json_encode($original_content, JSON_PRETTY_PRINT);
-    $prompt .= "\n\nPlease provide the rewritten content for each field:";
+    $prompt .= "\n\nHere's the original content:\n\n" . json_encode(array_map(function($value) {
+        return is_string($value) ? preg_replace('/\[.*?\]/', '', $value) : $value;
+    }, $original_content), JSON_PRETTY_PRINT);
+    
+    $prompt .= "\n\nPlease provide the rewritten content for each field. Format your response as a JSON object, where each key is the field name and each value is the rewritten content. Do not include any additional commentary or explanations outside of this JSON structure.";
 
     $result = claude_api_call($prompt);
 
@@ -431,7 +499,16 @@ function generate_claude_content($group_name, $original_content, $instructions) 
         return "Error: " . $result->get_error_message() . "\n\nIf this error persists, please check your network connection or contact support.";
     }
 
-    return $result;
+    // Attempt to decode the JSON response
+    $decoded_result = json_decode($result, true);
+
+    if (json_last_error() === JSON_ERROR_NONE) {
+        // The response is valid JSON
+        return $decoded_result;
+    } else {
+        // The response is not valid JSON
+        return "Error: The AI generated an invalid response. Please try again.";
+    }
 }
 
 function get_site_data($site_id) {
