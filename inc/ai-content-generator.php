@@ -298,14 +298,14 @@ function display_reference_page_content($reference_page, $reference_site_id) {
     echo "<p>Current Site ID: " . esc_html($reference_site_id) . "</p>";
     switch_to_blog($reference_site_id);
 
-    $fields = get_fields($reference_page->ID);
+    $field_groups = acf_get_field_groups(array('post_id' => $reference_page->ID));
 
-    if (!$fields) {
-        echo "<p>No ACF fields found for this page.</p>";
+    if (!$field_groups) {
+        echo "<p>No ACF field groups found for this page.</p>";
     } else {
-        echo "<ul>";
-        display_fields_recursive($fields);
-        echo "</ul>";
+        foreach ($field_groups as $field_group) {
+            process_field_group($field_group, $reference_page->ID);
+        }
     }
 
     restore_current_blog();
@@ -313,47 +313,98 @@ function display_reference_page_content($reference_page, $reference_site_id) {
     echo "</div>";
 }
 
-function display_fields_recursive($fields, $parent_key = '') {
-    foreach ($fields as $field_name => $field_value) {
-        $full_field_name = $parent_key ? $parent_key . '_' . $field_name : $field_name;
-        $field_object = get_field_object($full_field_name);
+function process_field_group($field_group, $post_id) {
+    $fields = acf_get_fields($field_group['key']);
+    $group_content = array();
+    $group_instructions = array();
 
-        // Skip image fields or fields containing image data
-        if (is_image_field($field_object, $field_value)) {
+    foreach ($fields as $field) {
+        // Skip the field if its name contains "image"
+        if (stripos($field['name'], 'image') !== false) {
             continue;
         }
 
-        echo "<li><strong>" . esc_html($field_name) . ":</strong> ";
-
-        if (is_array($field_value) && !isset($field_value['type'])) {
-            echo "<ul>";
-            display_fields_recursive($field_value, $full_field_name);
-            echo "</ul>";
-        } else {
-            echo esc_html(is_array($field_value) ? json_encode($field_value) : $field_value);
+        $field_value = get_field($field['name'], $post_id);
+        
+        // If the field value is an array, recursively filter it
+        if (is_array($field_value)) {
+            $field_value = array_filter($field_value, function($key) {
+                return stripos($key, 'image') === false;
+            }, ARRAY_FILTER_USE_KEY);
         }
 
-        echo "</li>";
+        if (!empty($field_value)) {
+            $group_content[$field['name']] = $field_value;
+            $group_instructions[$field['name']] = $field['instructions'] ?? '';
+        }
     }
+
+    if (!empty($group_content)) {
+        echo "<h2>Field Group: " . esc_html($field_group['title']) . "</h2>";
+        echo "<h3>Filtered Content (Debug):</h3>";
+        echo "<pre>" . esc_html(json_encode($group_content, JSON_PRETTY_PRINT)) . "</pre>";
+        preview_claude_api_call($field_group['title'], $group_content, $group_instructions);
+        $generated_content = generate_claude_content($field_group['title'], $group_content, $group_instructions);
+        echo "<h3>Generated Content:</h3>";
+        echo "<pre>" . esc_html($generated_content) . "</pre>";
+    } else {
+        echo "<p>No non-image fields found in this group.</p>";
+    }
+    echo "<hr>";
 }
 
-function is_image_field($field_object, $field_value) {
-    // Check if it's an image field type
-    if ($field_object && $field_object['type'] === 'image') {
-        return true;
+function preview_claude_api_call($group_name, $original_content, $instructions) {
+    $prompt = "You are an AI assistant for a local business website. Please rewrite the following content for the field group '{$group_name}', maintaining the same meaning but making it unique and suitable for a local business website.";
+    
+    $prompt .= "\n\nField Instructions:";
+    foreach ($instructions as $field_name => $instruction) {
+        $prompt .= "\n{$field_name}: {$instruction}";
+    }
+    
+    $prompt .= "\n\nHere's the original content:\n\n" . json_encode($original_content, JSON_PRETTY_PRINT);
+    $prompt .= "\n\nPlease provide the rewritten content for each field:";
+    
+    echo "<h3>Preview of Claude API Call for group: " . esc_html($group_name) . "</h3>";
+    echo "<pre>";
+    echo "Endpoint: https://api.anthropic.com/v1/messages\n";
+    echo "Headers: \n";
+    echo json_encode([
+        'x-api-key' => substr(get_claude_api_key(), 0, 5) . '...', // Only show first 5 characters of API key
+        'anthropic-version' => '2023-06-01',
+        'content-type' => 'application/json',
+    ], JSON_PRETTY_PRINT);
+    echo "\n\nBody:\n";
+    echo json_encode([
+        'model' => 'claude-3-5-sonnet-20240620',
+        'max_tokens' => 4096,
+        'messages' => [
+            [
+                'role' => 'user',
+                'content' => $prompt,
+            ],
+        ],
+    ], JSON_PRETTY_PRINT);
+    echo "</pre>";
+}
+
+function generate_claude_content($group_name, $original_content, $instructions) {
+    $prompt = "You are an AI assistant for a local business website. Please rewrite the following content for the field group '{$group_name}', maintaining the same meaning but making it unique and suitable for a local business website.";
+    
+    $prompt .= "\n\nField Instructions:";
+    foreach ($instructions as $field_name => $instruction) {
+        $prompt .= "\n{$field_name}: {$instruction}";
+    }
+    
+    $prompt .= "\n\nHere's the original content:\n\n" . json_encode($original_content, JSON_PRETTY_PRINT);
+    $prompt .= "\n\nPlease provide the rewritten content for each field:";
+
+    $result = claude_api_call($prompt);
+
+    if (is_wp_error($result)) {
+        return "Error: " . $result->get_error_message() . "\n\nIf this error persists, please check your network connection or contact support.";
     }
 
-    // Check if it's an array containing image data
-    if (is_array($field_value) && isset($field_value['type']) && $field_value['type'] === 'image') {
-        return true;
-    }
-
-    // Check if it's a nested array containing image data
-    if (is_array($field_value) && isset($field_value['sizes']) && isset($field_value['url'])) {
-        return true;
-    }
-
-    return false;
+    return $result;
 }
 
 function get_site_data($site_id) {
