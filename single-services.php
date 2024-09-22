@@ -40,17 +40,6 @@ get_template_part('template-parts/page-hero', $template, array(
     </div>
 </div>
 
-<div class="container my-5">
-    <div class="row">
-        <div class="col-lg-8">
-        <?php get_template_part('template-parts/service', 'content'); ?>
-        </div>
-        <div class="col-lg-4">
-            <?php get_template_part('template-parts/contact', 'sidebar'); ?>
-        </div>
-    </div>
-</div>
-
 <?php
 get_footer(); // This should include any footer content and close necessary tags
 ?>
