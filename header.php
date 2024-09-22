@@ -24,7 +24,7 @@
     <div class="row align-items-center gy-2 gy-md-0">
       <div class="col-md-3 text-center text-md-start order-md-1 order-2">
         <i class="fas fa-phone-alt me-2 fs-4"></i>
-        <span class="fs-4"><?php echo get_theme_mod('header_phone', '(123) 456-7890'); ?></span>
+        <span class="fs-4"><?php echo esc_attr(get_option('site_phone', '123-456-7890')); ?></span>
       </div>
       <div class="col-md-6 text-center order-md-2 order-1">
         <?php
