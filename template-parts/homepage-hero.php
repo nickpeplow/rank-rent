@@ -12,16 +12,7 @@ $hero_subheading = $hero_data['hero_subheading'] ?? 'Lorem ipsum dolor sit amet,
 $hero_subheading = rnr_replace($hero_subheading);
 
 
-$background_image = $hero_data['hero_background_image'] ?? null;
-
-// Handle image whether it's an ID, an array, or not set
-if (is_array($background_image) && isset($background_image['ID'])) {
-    $background_image_url = wp_get_attachment_image_url($background_image['ID'], 'full');
-} elseif (is_numeric($background_image)) {
-    $background_image_url = wp_get_attachment_image_url($background_image, 'full');
-} else {
-    $background_image_url = 'https://placehold.co/1600x400';
-}
+$background_image_url = get_option('site_default_hero', '');
 
 $location = get_option('site_location', '');
 $site_niche = ranknrent_get_site_niche_name();

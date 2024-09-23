@@ -118,6 +118,18 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         register_setting('rank_rent_options', 'site_address', 'sanitize_text_field');
         register_setting('rank_rent_options', 'site_email', 'sanitize_email');
         register_setting('rank_rent_options', 'site_phone', 'sanitize_text_field');
+
+        // Add new field for site default hero image
+        add_settings_field(
+            'site_default_hero',
+            'Default Hero Image',
+            'ranknrent_hero_field_callback',
+            'rank_rent',
+            'rank_rent_section'
+        );
+
+        // Register new setting
+        register_setting('rank_rent_options', 'site_default_hero', 'esc_url_raw');
     }
     add_action('admin_init', 'ranknrent_register_settings');
 
@@ -163,6 +175,17 @@ if (!function_exists('ranknrent_add_settings_menu')) {
     function ranknrent_phone_field_callback() {
         $phone = get_option('site_phone', '');
         echo '<input type="tel" name="site_phone" value="' . esc_attr($phone) . '" class="regular-text">';
+    }
+
+    // New field callback for hero image
+    function ranknrent_hero_field_callback() {
+        $hero_image = get_option('site_default_hero', '');
+        ?>
+        <input type="text" name="site_default_hero" id="site_default_hero" value="<?php echo esc_attr($hero_image); ?>" class="regular-text">
+        <input type="button" class="button-secondary" value="Upload Image" id="upload_hero_image_button">
+        <br>
+        <img id="hero_image_preview" src="<?php echo esc_url($hero_image); ?>" style="max-width: 300px; <?php echo empty($hero_image) ? 'display:none;' : ''; ?>">
+        <?php
     }
 
     // Function to get niches from JSON file
@@ -292,4 +315,13 @@ if (!function_exists('ranknrent_add_settings_menu')) {
     
         return null;
     }
+
+    // Enqueue media library scripts
+    function ranknrent_enqueue_media_uploader() {
+        if (isset($_GET['page']) && $_GET['page'] === 'rank_rent') {
+            wp_enqueue_media();
+            wp_enqueue_script('ranknrent-admin-script', get_template_directory_uri() . '/js/ranknrent-admin.js', array('jquery'), null, true);
+        }
+    }
+    add_action('admin_enqueue_scripts', 'ranknrent_enqueue_media_uploader');
 }

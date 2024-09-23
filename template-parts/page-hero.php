@@ -8,9 +8,10 @@
  * @param string $template The template name (optional)
  */
 
+
 $title = $args['title'] ?? get_the_title();
 $subtitle = $args['subtitle'] ?? '';
-$background_image = $args['background_image'] ?? 'https://placehold.co/1600x400';
+$background_image = get_option('site_default_hero', '');
 $template = $args['template'] ?? 'default';
 
 // Add a class based on the template
