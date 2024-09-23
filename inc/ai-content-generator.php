@@ -530,15 +530,19 @@ function get_site_data($site_id) {
 }
 
 function render_site_comparison($reference_site_data, $current_site_data) {
-    foreach ($reference_site_data['pages'] as $reference_page) {
-        echo '<tr>';
-        echo '<td>';
-        echo '<input type="checkbox" name="generate_fields[' . esc_attr($reference_page->ID) . ']" value="all">';
-        echo ' <strong>' . esc_html($reference_page->post_title) . '</strong>';
-        echo '</td>';
-        echo '<td>' . render_page_fields($reference_page, $reference_site_data) . '</td>';
-        echo '<td>' . render_page_fields($reference_page, $current_site_data) . '</td>';
-        echo '</tr>';
+    if (is_array($reference_site_data['pages'])) { // Ensure 'pages' is an array
+        foreach ($reference_site_data['pages'] as $reference_page) {
+            echo '<tr>';
+            echo '<td>';
+            echo '<input type="checkbox" name="generate_fields[' . esc_attr($reference_page->ID) . ']" value="all">';
+            echo ' <strong>' . esc_html($reference_page->post_title) . '</strong>';
+            echo '</td>';
+            echo '<td>' . render_page_fields($reference_page, $reference_site_data) . '</td>';
+            echo '<td>' . render_page_fields($reference_page, $current_site_data) . '</td>';
+            echo '</tr>';
+        }
+    } else {
+        echo '<tr><td colspan="3">No pages found in the reference site.</td></tr>';
     }
 }
 
