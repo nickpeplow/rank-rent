@@ -20,9 +20,9 @@
         "Emergency Bike Lock Opening"
       ],
       "colors": {
-        "primary-color": "#052C52",
-        "cta-color": "#00AA5D",
-        "secondary-background": "#F8F9FB"
+        "primary-color": "#00664e",
+        "cta-color": "#ff6801",
+        "secondary-background": "#f0f2f2"
       }
     }
 ]
