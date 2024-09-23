@@ -1,7 +1,8 @@
+<?php $site_niche = ranknrent_get_site_niche_name(); ?>
 <!-- Services Section -->
 <section class="services py-5 pb-4 pb-md-6 bg-success">
     <div class="container">
-        <h2 class="text-center mb-1 text-white">Services</h2>
+        <h2 class="text-center mb-1 text-white"><?php echo esc_html($site_niche); ?> Services</h2>
         <?php
         // Update this line to correctly retrieve the ACF field
         $services_data = get_field('homepage_services');
@@ -51,6 +52,11 @@
                 echo '<p class="text-white">No services found.</p>';
             endif;
             ?>
+        </div> <!-- End of services row -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <a href="/services" class="btn btn-light btn-lg mt-2 mb-2">View All Services</a>
+            </div>
         </div>
     </div>
 </section>
