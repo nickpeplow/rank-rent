@@ -60,7 +60,7 @@
       min-width: auto;
       column-count: 1;
       left: 50%;
-      transform: translateX(-50%);
+      transform: none;
       position: absolute;
       width: 90%;
       max-width: 300px;

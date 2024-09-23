@@ -58,7 +58,7 @@
   /* New hover color for submenu items */
   .services-submenu .dropdown-item:hover,
   .services-submenu .dropdown-item:focus {
-    background-color: #0e4782; /* Different tint of bg-success */
+    background-color: #00795d; /* Different tint of bg-success */
     color: white;
   }
   
@@ -67,7 +67,7 @@
       min-width: auto;
       column-count: 1;
       left: 50%;
-      transform: translateX(-50%);
+      transform: none;
       position: absolute;
       width: 90%;
       max-width: 300px;
