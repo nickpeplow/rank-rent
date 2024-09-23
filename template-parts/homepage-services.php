@@ -7,7 +7,11 @@
         $services_data = get_field('homepage_services');
         $services_subheading = $services_data['services_subheading'] ?? 'Discover our range of professional services tailored to meet your needs.';
         ?>
-        <p class="lead text-center text-white mb-5"><?php echo esc_html($services_subheading); ?></p>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <p class="lead text-center text-white mb-5"><?php echo esc_html($services_subheading); ?></p>
+            </div>
+        </div>
         <div class="row">
             <?php
             $args = array(
