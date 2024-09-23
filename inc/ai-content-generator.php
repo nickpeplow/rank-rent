@@ -426,7 +426,7 @@ function process_field_group($field_group, $post_id) {
 }
 
 function preview_claude_api_call($group_name, $original_content, $instructions) {
-    $prompt = "You are an AI assistant for a local business website. Please rewrite the following content for the field group '{$group_name}', maintaining the same meaning but making it unique and suitable for a local business website.";
+    $prompt = "You are an AI assistant for a local business website. Please rewrite the following content for the field group '{$group_name}', maintaining the same meaning but making it unique and suitable for a local business website. Ensure the rewritten content is of a similar length to the provided example, as the field spaces are limited. If there are repeating content sections within the group, ensure that they are all of a similar length.";
     
     $prompt .= "\n\nField Instructions:";
     foreach ($instructions as $field_name => $instruction) {
@@ -471,7 +471,7 @@ function preview_claude_api_call($group_name, $original_content, $instructions) 
 }
 
 function generate_claude_content($group_name, $original_content, $instructions) {
-    $prompt = "You are an AI assistant for a local business website. Please rewrite the following content for the field group '{$group_name}', maintaining the same meaning but making it unique and suitable for a local business website. Ignore any text within square brackets [] as these are placeholders.";
+    $prompt = "You are an AI assistant for a local business website. Please rewrite the following content for the field group '{$group_name}', maintaining the same meaning but making it unique and suitable for a local business website. Ensure the rewritten content is of a similar length to the provided example, as the field spaces are limited. If there are repeating content sections within the group, ensure that they are all of a similar length. Ignore any text within square brackets [] as these are placeholders.";
     
     $prompt .= "\n\nField Instructions:";
     foreach ($instructions as $field_name => $instruction) {
