@@ -20,7 +20,6 @@
 
     // Get the selected niche
     $niche_slug = get_option('site_niche', '');
-    echo '<!-- Selected niche slug: ' . $niche_slug . ' -->'; // Debugging statement
 
     $primary_color = '#007bff'; // Default color
     $cta_color = '#ffc107'; // Default CTA color
@@ -28,7 +27,6 @@
 
     // Get the niche details
     $niche = ranknrent_get_niche_details($niche_slug);
-    echo '<!-- Niche details: ' . print_r($niche, true) . ' -->'; // Debugging statement
 
     if ($niche && isset($niche['colors'])) {
         $primary_color = $niche['colors']['primary'] ?? $primary_color;
@@ -42,10 +40,6 @@
         --secondary-background: ' . esc_attr($secondary_background) . '; 
         --primary-color-rgb: ' . implode(',', sscanf($primary_color, "#%02x%02x%02x")) . '; 
     }</style>';
-    echo '<!-- Primary Color: ' . esc_attr($primary_color) . ' -->'; // Debugging statement
-    echo '<!-- Primary Color RGB: ' . implode(',', sscanf($primary_color, "#%02x%02x%02x")) . ' -->'; // Debugging statement
-    echo '<!-- CTA Color: ' . esc_attr($cta_color) . ' -->'; // Debugging statement
-    echo '<!-- Secondary Background: ' . esc_attr($secondary_background) . ' -->'; // Debugging statement
 
     // Start of niche color variables section
     $slug = 'locksmith'; // Example slug, you might get this dynamically
