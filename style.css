@@ -56,3 +56,7 @@ a.btn.cta-bg:hover {
 .secondary-bg {
     background-color: var(--secondary-background);
 }
+
+.text-primary-color {
+    color: var(--primary-color);
+}
