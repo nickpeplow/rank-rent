@@ -251,19 +251,37 @@ if (!function_exists('ranknrent_add_settings_menu')) {
 
     // Add filters to apply the replacement
     add_filter('the_content', 'ranknrent_replace_site_location');
-    add_filter('the_title', 'ranknrent_replace_site_location');
+    //add_filter('the_title', 'ranknrent_replace_site_location');
     add_filter('widget_text_content', 'ranknrent_replace_site_location');
-    add_filter('the_excerpt', 'ranknrent_replace_site_location');
+    //add_filter('the_excerpt', 'ranknrent_replace_site_location');
 
     // Apply the filter to all text widgets
     add_filter('widget_text', 'ranknrent_replace_site_location');
 
     // Apply the filter to navigation menu items
-    add_filter('nav_menu_item_title', 'ranknrent_replace_site_location');
+    //add_filter('nav_menu_item_title', 'ranknrent_replace_site_location');
 
     // Optional: Apply the filter to custom fields
-    add_filter('acf/load_value', 'ranknrent_replace_site_location');
+ //add_filter('acf/load_value', 'ranknrent_replace_site_location');
 
     // Optional: If you want to allow shortcodes in titles
-    add_filter('the_title', 'do_shortcode');
+    //add_filter('the_title', 'do_shortcode');
+
+    // New function to replace [site_location] in given content
+    function rnr_replace($content) {
+        $site_location = esc_html(get_option('site_location', ''));
+
+        if (is_array($content)) {
+            foreach ($content as $key => $value) {
+                $content[$key] = rnr_replace($value);
+            }
+        } else {
+            $content = str_replace('[site_location]', $site_location, $content);
+        }
+
+        return $content;
+    }
+
+    // Example usage in a theme page
+    // echo rnr_replace($your_content_variable);
 }

@@ -5,7 +5,7 @@
         <h2 class="text-center mb-1 text-white"><?php echo esc_html($site_niche); ?> Services</h2>
         <?php
         // Update this line to correctly retrieve the ACF field
-        $services_data = get_field('homepage_services');
+        $services_data = rnr_replace(get_field('homepage_services'));
         $services_subheading = $services_data['services_subheading'] ?? 'Discover our range of professional services tailored to meet your needs.';
         ?>
         <div class="row justify-content-center">
@@ -24,7 +24,7 @@
             if ($services_query->have_posts()) :
                 while ($services_query->have_posts()) : $services_query->the_post();
                     $service_link = get_permalink();
-                    $service_description = get_field('service_short_description');
+                    $service_description = rnr_replace(get_field('service_short_description'));
                     $service_description = $service_description ? $service_description : 'Brief description of the service. Click to learn more.';
                     ?>
                     <div class="col-md-4 mb-4">
@@ -38,7 +38,7 @@
                                     <?php endif; ?>
                                 </div>
                                 <div class="card-body text-center">
-                                    <h3 class="card-title"><?php the_title(); ?></h3>
+                                    <h3 class="h4 card-title"><?php the_title(); ?></h3>
                                     <p class="card-text"><?php echo esc_html($service_description); ?></p>
                                     <span class="btn cta-bg text-white">Learn More</span>
                                 </div>

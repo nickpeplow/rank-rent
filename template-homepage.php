@@ -6,6 +6,7 @@ Template Name: Homepage
 get_header();
 ?>
 
+
 <main id="main-content">
     <!-- Hero Section -->
     <style>

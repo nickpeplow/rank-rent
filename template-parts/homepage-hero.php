@@ -7,8 +7,10 @@
  * @param string $background_image The background image URL (optional)
  */
  
-$hero_data = get_field('hero');
+$hero_data = rnr_replace(get_field('hero'));
 $hero_subheading = $hero_data['hero_subheading'] ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar.';
+$hero_subheading = rnr_replace($hero_subheading);
+
 
 $background_image = $hero_data['hero_background_image'] ?? null;
 
@@ -24,7 +26,7 @@ if (is_array($background_image) && isset($background_image['ID'])) {
 $location = get_option('site_location', '');
 $site_niche = ranknrent_get_site_niche_name();
 $hero_heading = "Professional and Affordable $site_niche in $location";
-
+$hero_heading = rnr_replace($hero_heading);
 
 ?>
 
@@ -70,11 +72,11 @@ $hero_heading = "Professional and Affordable $site_niche in $location";
               <div class="so-widget-sow-editor so-widget-sow-editor-base">
                 <div class="siteorigin-widget-tinymce textwidget">
                     <?php 
-                    $homepage_about = get_field('homepage_about') ?: [];
+                    $homepage_about = rnr_replace(get_field('homepage_about')) ?: [];
                     $about_heading = $homepage_about['about_heading'] ?? 'About Us';
                     $about_text = $homepage_about['about_text'] ?? 'Welcome to our company. We provide high-quality services to meet all your needs. Our team of experts is dedicated to ensuring customer satisfaction and delivering exceptional results.';
                     ?>
-                    <h2 class="h1 mb-4"><?php echo esc_html($about_heading); ?></h2>
+                    <h2 class="h2 mb-4"><?php echo esc_html($about_heading); ?></h2>
                     <?php echo wp_kses_post($about_text); ?>
                 </div>
               </div>
