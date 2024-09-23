@@ -26,7 +26,7 @@
           <div class="card-body p-4">
             <!-- Form title with icon and underline -->
             <div class="text-center mb-4">
-              <i class="fas fa-clipboard-list fa-2x text-success mb-3"></i>
+              <i class="fas fa-clipboard-list fa-2x text-primary-color mb-3"></i>
               <h4 class="card-title fw-bold">Get a quote</h4>
               <div class="primary-bg mx-auto" style="height: 2px; width: 50px;"></div>
             </div>
@@ -56,7 +56,7 @@
               <button type="submit" class="btn cta-bg w-100">Get Your Free Quote</button>
             </form>
             <div class="text-center mt-3">
-              <small class="text-muted">Need help? <a href="./page-help-center.html" class="text-success">Visit our Help Center</a></small>
+              <small class="text-muted">Need help? <a href="./page-help-center.html" class="text-primary-color">Visit our Help Center</a></small>
             </div>
           </div>
         </div>

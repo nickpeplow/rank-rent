@@ -37,12 +37,12 @@
                                             <i class="fas fa-star text-warning"></i>
                                         <?php endfor; ?>
                                     </div>
-                                    <div class="text-success">
+                                    <div class="text-primary-color">
                                         <i class="fas fa-check-circle"></i> Verified Review
                                     </div>
                                 </div>
                                 <blockquote class="blockquote mb-0">
-                                    <p class="mb-0"><i class="fas fa-quote-left text-success me-2"></i><?php echo esc_html($quote); ?></p>
+                                    <p class="mb-0"><i class="fas fa-quote-left text-primary-color me-2"></i><?php echo esc_html($quote); ?></p>
                                 </blockquote>
                             </div>
                         </div>

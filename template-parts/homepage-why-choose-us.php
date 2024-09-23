@@ -25,7 +25,7 @@
             $content = $homepage_why["why_{$i}_content"] ?? "Default Content {$i}";
           ?>
             <div class="col-sm-6">
-              <h3 class="h5 text-success mb-2"><?php echo esc_html($heading); ?></h3>
+              <h3 class="h5 text-primary-color mb-2"><?php echo esc_html($heading); ?></h3>
               <p class="mb-0"><?php echo esc_html($content); ?></p>
             </div>
           <?php endfor; ?>

@@ -3,7 +3,7 @@
         <div class="row g-3">
             <div class="col-md-4">
                 <div class="d-flex align-items-center bg-black bg-opacity-50 p-3 rounded hover-effect">
-                    <i class="fas fa-map-marker-alt fa-2x text-success me-3"></i>
+                    <i class="fas fa-map-marker-alt fa-2x text-primary-color me-3"></i>
                     <div>
                         <h4 class="h6 mb-1">Location</h4>
                         <p class="mb-0 small"><?php echo esc_attr(get_option('site_address', '')); ?></p>
@@ -12,7 +12,7 @@
             </div>
             <div class="col-md-4">
                 <div class="d-flex align-items-center bg-black bg-opacity-50 p-3 rounded hover-effect">
-                    <i class="fas fa-envelope fa-2x text-success me-3"></i>
+                    <i class="fas fa-envelope fa-2x text-primary-color me-3"></i>
                     <div>
                         <h4 class="h6 mb-1">Email</h4>
                         <p class="mb-0 small"><?php echo esc_attr(get_option('site_email', '')); ?></p>
@@ -21,7 +21,7 @@
             </div>
             <div class="col-md-4">
                 <div class="d-flex align-items-center bg-black bg-opacity-50 p-3 rounded hover-effect">
-                    <i class="fas fa-phone fa-2x text-success me-3"></i>
+                    <i class="fas fa-phone fa-2x text-primary-color me-3"></i>
                     <div>
                         <h4 class="h6 mb-1">Call</h4>
                         <p class="mb-0 small"><?php echo esc_attr(get_option('site_phone', '')); ?></p>
