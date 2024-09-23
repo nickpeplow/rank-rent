@@ -284,4 +284,17 @@ if (!function_exists('ranknrent_add_settings_menu')) {
 
     // Example usage in a theme page
     // echo rnr_replace($your_content_variable);
+
+    function get_niche_colors($slug) {
+        $json = file_get_contents(get_template_directory() . '/inc/niches.json');
+        $niches = json_decode($json, true);
+    
+        foreach ($niches as $niche) {
+            if ($niche['slug'] === $slug) {
+                return $niche['colors'];
+            }
+        }
+    
+        return null;
+    }
 }

@@ -44,6 +44,24 @@
     }</style>';
     echo '<!-- Primary Color: ' . esc_attr($primary_color) . ' -->'; // Debugging statement
     echo '<!-- Primary Color RGB: ' . implode(',', sscanf($primary_color, "#%02x%02x%02x")) . ' -->'; // Debugging statement
+    echo '<!-- CTA Color: ' . esc_attr($cta_color) . ' -->'; // Debugging statement
+    echo '<!-- Secondary Background: ' . esc_attr($secondary_background) . ' -->'; // Debugging statement
+
+    // Start of niche color variables section
+    $slug = 'locksmith'; // Example slug, you might get this dynamically
+    $colors = get_niche_colors($slug);
+
+    if ($colors) {
+        echo '<style>';
+        echo ':root {';
+        echo '--primary-color: ' . esc_attr($colors['primary-color']) . '; ';
+        echo '--cta-color: ' . esc_attr($colors['cta-color']) . '; ';
+        echo '--secondary-background: ' . esc_attr($colors['secondary-background']) . '; ';
+        echo '}';
+        echo '</style>';
+    }
+    // End of niche color variables section
+
     ?>
 </head>
 <body <?php body_class(); ?>>
