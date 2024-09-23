@@ -18,14 +18,16 @@ function rankandrent_setup() {
 add_action('after_setup_theme', 'rankandrent_setup');
 
 function rankandrent_scripts() {
+    $theme_version = wp_get_theme()->get('Version');
+
     // Enqueue Bootstrap CSS
-    wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
+    wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css', array(), $theme_version);
     
     // Enqueue Font Awesome CSS
-    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', array(), $theme_version);
     
     // Enqueue theme's main stylesheet
-    wp_enqueue_style('rankandrent-style', get_stylesheet_uri());
+    wp_enqueue_style('rankandrent-style', get_stylesheet_uri(), array(), $theme_version);
     
     // Enqueue Bootstrap JS
     wp_enqueue_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', array(), '5.3.0', true);
