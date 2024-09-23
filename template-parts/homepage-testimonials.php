@@ -19,7 +19,7 @@
                 } elseif (is_numeric($image)) {
                     $image_url = wp_get_attachment_image_url($image, 'testimonial-avatar');
                 } else {
-                    $image_url = 'https://via.placeholder.com/80x80.png?text=Avatar';
+                    $image_url = "https://i.pravatar.cc/250?u=$i";
                 }
             ?>
                 <div class="col-lg-6 mb-4">
