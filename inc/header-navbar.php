@@ -6,7 +6,7 @@
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item"><a href="<?php echo home_url(); ?>" class="nav-link px-3 text-white">Home</a></li>
-        <li class="nav-item"><a href="<?php echo home_url('/about'); ?>" class="nav-link px-3 text-white">About</a></li>
+        <li class="nav-item"><a href="<?php echo home_url('/about-us'); ?>" class="nav-link px-3 text-white">About</a></li>
         <li class="nav-item dropdown">
           <a href="<?php echo home_url('/services'); ?>" class="nav-link px-3 dropdown-toggle text-white" data-bs-toggle="dropdown">Services</a>
           <ul class="dropdown-menu dropdown-menu-dark primary-bg">
