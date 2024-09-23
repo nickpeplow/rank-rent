@@ -30,3 +30,29 @@ body {
     /* Ensure the body inherits the root font size */
     font-size: 1rem;
 }
+
+.primary-bg {
+    background-color: var(--primary-color);
+}
+
+.cta-bg {
+    background-color: var(--cta-color);
+    transition: background-color 0.3s, filter 0.3s;
+}
+
+.cta-bg:hover {
+    filter: brightness(75%); /* Darken the color by 25% */
+}
+
+a.btn.cta-bg {
+    background-color: var(--cta-color);
+    transition: background-color 0.3s, filter 0.3s;
+}
+
+a.btn.cta-bg:hover {
+    filter: brightness(75%); /* Darken the color by 25% */
+}
+
+.secondary-bg {
+    background-color: var(--secondary-background);
+}

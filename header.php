@@ -14,6 +14,36 @@
         echo '<link rel="icon" href="' . esc_url(get_template_directory_uri() . '/assets/images/default-favicon.ico') . '" type="image/x-icon">';
         echo '<link rel="shortcut icon" href="' . esc_url(get_template_directory_uri() . '/assets/images/default-favicon.ico') . '" type="image/x-icon">';
     }
+
+    // Ensure the multisite.php file is included
+    require_once get_template_directory() . '/inc/multisite.php';
+
+    // Get the selected niche
+    $niche_slug = get_option('site_niche', '');
+    echo '<!-- Selected niche slug: ' . $niche_slug . ' -->'; // Debugging statement
+
+    $primary_color = '#007bff'; // Default color
+    $cta_color = '#ffc107'; // Default CTA color
+    $secondary_background = '#D5D8DA'; // Default secondary background color
+
+    // Get the niche details
+    $niche = ranknrent_get_niche_details($niche_slug);
+    echo '<!-- Niche details: ' . print_r($niche, true) . ' -->'; // Debugging statement
+
+    if ($niche && isset($niche['colors'])) {
+        $primary_color = $niche['colors']['primary'] ?? $primary_color;
+        $cta_color = $niche['colors']['cta'] ?? $cta_color;
+        $secondary_background = $niche['colors']['secondary_background'] ?? $secondary_background;
+    }
+
+    echo '<style>:root { 
+        --primary-color: ' . esc_attr($primary_color) . '; 
+        --cta-color: ' . esc_attr($cta_color) . '; 
+        --secondary-background: ' . esc_attr($secondary_background) . '; 
+        --primary-color-rgb: ' . implode(',', sscanf($primary_color, "#%02x%02x%02x")) . '; 
+    }</style>';
+    echo '<!-- Primary Color: ' . esc_attr($primary_color) . ' -->'; // Debugging statement
+    echo '<!-- Primary Color RGB: ' . implode(',', sscanf($primary_color, "#%02x%02x%02x")) . ' -->'; // Debugging statement
     ?>
 </head>
 <body <?php body_class(); ?>>
@@ -36,7 +66,7 @@
         ?>
       </div>
       <div class="col-md-3 text-center text-md-end order-md-3 order-3">
-        <a href="/contact" class="btn btn-success btn-lg text-white px-4 py-2 fs-5">
+        <a href="/contact" class="btn cta-bg btn-lg text-white px-4 py-2 fs-5">
           <?php echo get_theme_mod('header_cta_text', 'Request a Service'); ?>
         </a>
       </div>

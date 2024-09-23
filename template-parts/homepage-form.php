@@ -40,7 +40,7 @@
                 <label for="message" class="form-label small mb-1">Message</label>
                 <textarea class="form-control" id="message" rows="3" placeholder="Enter your message"></textarea>
             </div>
-            <button type="submit" class="btn btn-success btn-lg w-100">Submit</button>
+            <button type="submit" class="btn cta-bg btn-lg w-100 text-white">Submit</button>
         </form>
     </div>
 </div>

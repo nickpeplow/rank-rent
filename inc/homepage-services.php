@@ -40,7 +40,7 @@
                                 <div class="card-body text-center">
                                     <h3 class="card-title"><?php the_title(); ?></h3>
                                     <p class="card-text"><?php echo esc_html($service_description); ?></p>
-                                    <span class="btn cta-bg text-white"">Learn More</span>
+                                    <span class="btn cta-bg text-white">Learn More</span>
                                 </div>
                             </div>
                         </a>
@@ -55,7 +55,7 @@
         </div> <!-- End of services row -->
         <div class="row">
             <div class="col-12 text-center">
-                <a href="/services" class="btn text-white cta-bg btn-lg mt-2 mb-2">View All Services</a>
+                <a href="/services" class="btn btn-light btn-lg mt-2 mb-2">View All Services</a>
             </div>
         </div>
     </div>

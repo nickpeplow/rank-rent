@@ -34,7 +34,7 @@ $hero_heading = "Professional and Affordable $site_niche in $location";
             <div class="col-lg-8">
                 <h1 class="display-4"><?php echo esc_html($hero_heading); ?></h1>
                 <p class="lead mb-4"><?php echo esc_html($hero_subheading); ?></p>
-                <a href="/services" class="btn btn-success btn-lg">View All Services</a>
+                <a href="/services" class="btn cta-bg btn-lg text-white">View All Services</a>
             </div>
         </div>
     </div>

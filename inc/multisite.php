@@ -187,11 +187,25 @@ if (!function_exists('ranknrent_add_settings_menu')) {
 
     // Function to get niche details by slug
     function ranknrent_get_niche_details($slug) {
-        $niches = ranknrent_get_niches();
-        foreach ($niches as $niche) {
-            if ($niche['slug'] === $slug) {
-                return $niche;
+        $json_file = get_template_directory() . '/inc/niches.json';
+        if (file_exists($json_file)) {
+            $json_content = file_get_contents($json_file);
+            echo '<!-- JSON content: ' . $json_content . ' -->'; // Debugging statement
+            $niches = json_decode($json_content, true);
+            echo '<!-- Decoded JSON type: ' . gettype($niches) . ' -->'; // Debugging statement
+
+            if (is_array($niches)) {
+                foreach ($niches as $niche) {
+                    if ($niche['slug'] === $slug) {
+                        echo '<!-- Found niche: ' . print_r($niche, true) . ' -->'; // Debugging statement
+                        return $niche;
+                    }
+                }
+            } else {
+                echo '<!-- Warning: $niches is not an array -->'; // Debugging statement
             }
+        } else {
+            echo '<!-- Warning: JSON file does not exist -->'; // Debugging statement
         }
         return null;
     }

@@ -9,7 +9,7 @@
         <li class="nav-item"><a href="<?php echo home_url('/about'); ?>" class="nav-link px-3 text-white">About</a></li>
         <li class="nav-item dropdown">
           <a href="<?php echo home_url('/services'); ?>" class="nav-link px-3 dropdown-toggle text-white" data-bs-toggle="dropdown">Services</a>
-          <ul class="dropdown-menu dropdown-menu-dark primary-bg services-submenu">
+          <ul class="dropdown-menu dropdown-menu-dark primary-bg">
             <?php
             $services_pages = new WP_Query(array(
               'post_type' => 'services',
@@ -51,14 +51,7 @@
   }
   .dropdown-item:hover,
   .dropdown-item:focus {
-    background-color: #157347; /* Original hover color */
-    color: white;
-  }
-  
-  /* New hover color for submenu items */
-  .services-submenu .dropdown-item:hover,
-  .services-submenu .dropdown-item:focus {
-    background-color: #0e4782; /* Different tint of bg-success */
+    background-color: #157347;
     color: white;
   }
   
@@ -72,9 +65,5 @@
       width: 90%;
       max-width: 300px;
     }
-  }
-  
-  .submenu {
-    background-color: var(--primary-bg-color); /* Assuming primary-bg uses a CSS variable */
   }
 </style>
