@@ -29,33 +29,18 @@
     $niche = ranknrent_get_niche_details($niche_slug);
 
     if ($niche && isset($niche['colors'])) {
-        $primary_color = $niche['colors']['primary'] ?? $primary_color;
-        $cta_color = $niche['colors']['cta'] ?? $cta_color;
-        $secondary_background = $niche['colors']['secondary_background'] ?? $secondary_background;
+        $primary_color = $niche['colors']['primary-color'] ?? $primary_color;
+        $cta_color = $niche['colors']['cta-color'] ?? $cta_color;
+        $secondary_background = $niche['colors']['secondary-background'] ?? $secondary_background;
     }
 
+    // Output the colors as CSS variables
     echo '<style>:root { 
         --primary-color: ' . esc_attr($primary_color) . '; 
         --cta-color: ' . esc_attr($cta_color) . '; 
         --secondary-background: ' . esc_attr($secondary_background) . '; 
         --primary-color-rgb: ' . implode(',', sscanf($primary_color, "#%02x%02x%02x")) . '; 
     }</style>';
-
-    // Start of niche color variables section
-    $slug = 'locksmith'; // Example slug, you might get this dynamically
-    $colors = get_niche_colors($slug);
-
-    if ($colors) {
-        echo '<style>';
-        echo ':root {';
-        echo '--primary-color: ' . esc_attr($colors['primary-color']) . '; ';
-        echo '--cta-color: ' . esc_attr($colors['cta-color']) . '; ';
-        echo '--secondary-background: ' . esc_attr($colors['secondary-background']) . '; ';
-        echo '}';
-        echo '</style>';
-    }
-    // End of niche color variables section
-
     ?>
 </head>
 <body <?php body_class(); ?>>
