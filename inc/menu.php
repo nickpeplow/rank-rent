@@ -26,7 +26,7 @@
           <a class="nav-link text-white px-3 fs-5" href="<?= $site->url() ?>">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white px-3 fs-5" href="<?= $site->url() ?>/about">About</a>
+          <a class="nav-link text-white px-3 fs-5" href="<?= $site->url() ?>/about-us">About</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-white px-3 fs-5" href="<?= $site->url() ?>/services">Services</a>

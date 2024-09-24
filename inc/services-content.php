@@ -130,7 +130,12 @@ function ranknrent_get_service_prompt($service_title) {
         return false;
     }
     $prompt = file_get_contents($prompt_file);
-    return str_replace('{service_title}', $service_title, $prompt);
+    $site_niche = ranknrent_get_site_niche_name(); // Get the site niche name
+    $site_title = get_bloginfo('name'); // Get the site title
+    $prompt = str_replace('{service_title}', $service_title, $prompt);
+    $prompt = str_replace('{SITE_NICHE}', $site_niche, $prompt);
+    $prompt = str_replace('{SITE_TITLE}', $site_title, $prompt); // Replace {SITE_TITLE} with the actual site title
+    return $prompt;
 }
 
 // Function to get about prompt
@@ -139,7 +144,12 @@ function ranknrent_get_about_prompt() {
     if (!file_exists($prompt_file)) {
         return false;
     }
-    return file_get_contents($prompt_file);
+    $prompt = file_get_contents($prompt_file);
+    $site_niche = ranknrent_get_site_niche_name(); // Get the site niche name
+    $site_title = get_bloginfo('name'); // Get the site title
+    $prompt = str_replace('{SITE_NICHE}', $site_niche, $prompt);
+    $prompt = str_replace('{SITE_TITLE}', $site_title, $prompt); // Replace {SITE_TITLE} with the actual site title
+    return $prompt;
 }
 
 // Enqueue JavaScript for AJAX functionality

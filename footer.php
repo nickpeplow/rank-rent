@@ -19,6 +19,7 @@
                 <h5>Navigation</h5>
                 <ul class="list-unstyled">
                     <li><a href="<?php echo esc_url(home_url('/')); ?>" class="text-white">Home</a></li>
+                    <li><a href="<?php echo esc_url(home_url('/about-us')); ?>" class="text-white">About</a></li>
                     <li><a href="<?php echo esc_url(home_url('/services')); ?>" class="text-white">Services</a></li>
                     <li><a href="<?php echo esc_url(home_url('/contact')); ?>" class="text-white">Contact us</a></li>
                 </ul>
