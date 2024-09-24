@@ -1,7 +1,7 @@
 <!-- Testimonials Section -->
 <section class="testimonials py-5 pb-4 pb-md-6 primary-bg bg-opacity-10">
     <div class="container">
-        <h2 class="text-center mb-5">What Our Clients Say</h2>
+        <h2 class="text-center mb-5">What Our Clients Say About Us</h2>
         <div class="row justify-content-center">
             <?php
             $homepage_testimonials = get_field('homepage_testimonials');

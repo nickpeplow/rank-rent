@@ -1,7 +1,7 @@
 <!-- Testimonials Section -->
 <section class="testimonials py-5 pb-4 pb-md-6 secondary-bg">
     <div class="container">
-        <h2 class="text-center mb-5">What Our Clients Say</h2>
+        <h2 class="text-center mb-5">What Our Clients Say About Us</h2>
         <div class="row justify-content-center">
             <?php
             $homepage_testimonials = rnr_replace(get_field('homepage_testimonials'));
