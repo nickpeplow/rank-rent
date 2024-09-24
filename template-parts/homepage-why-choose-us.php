@@ -8,8 +8,10 @@
           $why_image = $homepage_why['why_image'] ?? null;
           $image_url = $why_image['url'] ?? 'https://via.placeholder.com/600x600';
           $image_alt = $why_image['alt'] ?? 'Why Choose Us Image';
+          $image_width = $why_image['width'] ?? 600;
+          $image_height = $why_image['height'] ?? 600;
           ?>
-          <img class="img-fluid" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
+          <img class="img-fluid" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>" width="<?php echo esc_attr($image_width); ?>" height="<?php echo esc_attr($image_height); ?>">
         </div>
       </div>
       <div class="col-lg-6">
