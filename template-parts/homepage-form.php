@@ -3,7 +3,6 @@
         <div class="text-center mb-3">
             <i class="fas fa-clipboard-list text-primary-color mb-2" style="font-size: 2.5rem;"></i>
             <h3 class="card-title mb-1">Get a Quote</h3>
-            <h5 class="card-subtitle text-primary-color">Guaranteed call back from the owner</h5>
         </div>
         <form>
             <div class="mb-2">
