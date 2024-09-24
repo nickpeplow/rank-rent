@@ -1,6 +1,6 @@
 <?php $site_niche = ranknrent_get_site_niche_name(); ?>
 <!-- Services Section -->
-<section class="services py-5 pb-4 pb-md-6 primary-bg">
+<section class="services py-5 pb-4 pb-md-6 secondary-bg">
     <div class="container">
         <h2 class="text-center mb-1 text-white"><?php echo esc_html($site_niche); ?> Services</h2>
         <?php
@@ -30,17 +30,13 @@
                     <div class="col-md-4 mb-4">
                         <a href="<?php echo esc_url($service_link); ?>" class="card-link text-decoration-none">
                             <div class="card h-100 shadow-sm transition-hover">
-                                <div class="card-img-wrapper" style="aspect-ratio: 16/9; overflow: hidden;">
-                                    <?php if (has_post_thumbnail()) : ?>
-                                        <?php the_post_thumbnail('service-thumbnail', array('class' => 'card-img-top', 'alt' => get_the_title())); ?>
-                                    <?php else : ?>
-                                        <img src="https://via.placeholder.com/600x338" class="card-img-top" alt="<?php the_title_attribute(); ?>">
-                                    <?php endif; ?>
+                                <div class="card-img-wrapper d-flex align-items-center justify-content-center secondary-bg" style="overflow: hidden;">
+                                    <i class="fas fa-cogs fa-4x text-white"></i>
                                 </div>
                                 <div class="card-body text-center">
                                     <h3 class="h4 card-title"><?php the_title(); ?></h3>
                                     <p class="card-text"><?php echo esc_html($service_description); ?></p>
-                                    <span class="btn cta-bg text-white"">Learn More</span>
+                                    <span class="btn cta-bg text-white">Learn More</span>
                                 </div>
                             </div>
                         </a>
