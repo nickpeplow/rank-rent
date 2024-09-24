@@ -86,3 +86,17 @@ function ranknrent_add_image_sizes() {
     add_image_size('service-thumbnail', 600, 338, true); // 16:9 aspect ratio
     add_image_size('testimonial-avatar', 80, 80, array('center', 'center'));
 }
+
+
+function add_conditional_custom_header_code() {
+    // Check if search engines are allowed to index the site
+    if (get_option('blog_public') == '1') {
+        echo '<meta name="robots" content="index, follow">';
+        echo '<meta name="googlebot" content="index, follow">';
+        echo '<link rel="sitemap" type="application/xml" title="Sitemap" href="/wp-sitemap.xml">';
+        
+        // You can add more SEO-friendly meta tags or scripts here
+    }
+}
+
+add_action('wp_head', 'add_conditional_custom_header_code');
