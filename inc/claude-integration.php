@@ -17,8 +17,11 @@ function set_claude_api_key($api_key) {
 
 // Function to make API calls to Claude
 function claude_api_call($prompt) {
+    error_log('claude_api_call called with prompt: ' . $prompt);
+    
     $api_key = get_claude_api_key();
     if (empty($api_key)) {
+        error_log('Claude API key is not set');
         return new WP_Error('no_api_key', 'Claude API key is not set');
     }
 
@@ -40,10 +43,11 @@ function claude_api_call($prompt) {
             'content-type' => 'application/json',
         ],
         'body' => json_encode($body),
-        'timeout' => 60, // Increase timeout to 60 seconds
+        'timeout' => 60,
     ]);
 
     if (is_wp_error($response)) {
+        error_log('API request failed: ' . $response->get_error_message());
         return new WP_Error('api_error', 'API request failed: ' . $response->get_error_message());
     }
 
@@ -53,8 +57,10 @@ function claude_api_call($prompt) {
     if (isset($data['error'])) {
         $error_message = isset($data['error']['message']) ? $data['error']['message'] : 'Unknown error';
         $error_type = isset($data['error']['type']) ? $data['error']['type'] : 'Unknown type';
+        error_log("Claude API error: Type: $error_type, Message: $error_message");
         return new WP_Error('claude_api_error', "Error type: $error_type. Message: $error_message");
     }
 
+    error_log('Claude API response: ' . print_r($data, true));
     return $data['content'][0]['text'] ?? '';
 }

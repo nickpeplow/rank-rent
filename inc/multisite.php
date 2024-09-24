@@ -14,6 +14,16 @@ if (!function_exists('ranknrent_add_settings_menu')) {
             'dashicons-admin-site',
             100
         );
+
+        // Add submenu page for Services Content
+        add_submenu_page(
+            'rank_rent',
+            'Services Content',
+            'Services Content',
+            'manage_options',
+            'rank_rent_services_content',
+            'ranknrent_render_services_content_page'
+        );
     }
     add_action('admin_menu', 'ranknrent_add_settings_menu');
 
@@ -325,3 +335,6 @@ if (!function_exists('ranknrent_add_settings_menu')) {
     }
     add_action('admin_enqueue_scripts', 'ranknrent_enqueue_media_uploader');
 }
+
+// Include the services content file
+require_once get_template_directory() . '/inc/services-content.php';
