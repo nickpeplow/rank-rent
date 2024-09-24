@@ -58,7 +58,7 @@
         if (has_custom_logo()) {
             the_custom_logo();
         } else {
-            echo '<h1><a href="' . esc_url(home_url('/')) . '" style="color: black; text-decoration: none;">' . get_bloginfo('name') . '</a></h1>';
+            echo '<a href="' . esc_url(home_url('/')) . '" class="text-dark fw-bold text-decoration-none display-6">' . get_bloginfo('name') . '</a>';
         }
         ?>
       </div>
