@@ -37,9 +37,9 @@
     </li>
 </ul>
         <div class="mt-4">
-            <a href="#" class="btn btn-outline-dark btn-sm me-2"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="btn btn-outline-dark btn-sm me-2"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="btn btn-outline-dark btn-sm"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm me-2" aria-label="Visit Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+            <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm me-2" aria-label="Visit Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm" aria-label="Visit YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
         </div>
     </div>
 </div>
