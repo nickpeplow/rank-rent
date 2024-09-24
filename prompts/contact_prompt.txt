@@ -27,7 +27,7 @@ Use a friendly, professional tone that builds trust
 Highlight the company's reliability and expertise in {SITE_NICHE}
 Focus on the value provided to customers, not on pricing
 Each h2 or h3 should be one paragraph long. 
-Break up the paragraphs to make it more readable
+Break up the paragraphs to make it more readable, paragraphs should be short and concise a maximum of 350 characters.
 Use relevant keywords naturally throughout the content for SEO
 
 Output just the content in simple HTML format for WordPress, no intro, no outro, no commentary.
