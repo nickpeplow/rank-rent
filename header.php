@@ -46,9 +46,20 @@
     echo '<meta property="og:title" content="' . esc_attr(get_bloginfo('name')) . '">';
     echo '<meta property="og:description" content="' . esc_attr(get_bloginfo('description')) . '">';
     echo '<meta property="og:url" content="' . esc_url(home_url('/')) . '">';
+    echo '<meta property="og:image" content="' . esc_url(get_template_directory_uri() . '/assets/images/og-image.jpg') . '">';
     echo '<meta property="og:type" content="website">';
-    
     ?>
+    
+    <!-- LocalBusiness Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "<?php echo esc_attr(get_bloginfo('name')); ?>",
+      "telephone": "<?php echo esc_attr(get_option('site_phone', '123-456-7890')); ?>",
+      "url": "<?php echo esc_url(home_url('/')); ?>"
+    }
+    </script>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
