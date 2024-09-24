@@ -25,7 +25,7 @@
                 while ($services_query->have_posts()) : $services_query->the_post();
                     $service_link = get_permalink();
                     $service_description = rnr_replace(get_field('service_short_description'));
-                    $service_description = $service_description ? $service_description : 'Brief description of the service. Click to learn more.';
+                    $service_description = $service_description ? $service_description : '';
                     ?>
                     <div class="col-md-4 mb-4">
                         <a href="<?php echo esc_url($service_link); ?>" class="card-link text-decoration-none">
