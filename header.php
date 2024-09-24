@@ -41,6 +41,13 @@
         --secondary-background: ' . esc_attr($secondary_background) . '; 
         --primary-color-rgb: ' . implode(',', sscanf($primary_color, "#%02x%02x%02x")) . '; 
     }</style>';
+
+    // Add Open Graph tags
+    echo '<meta property="og:title" content="' . esc_attr(get_bloginfo('name')) . '">';
+    echo '<meta property="og:description" content="' . esc_attr(get_bloginfo('description')) . '">';
+    echo '<meta property="og:url" content="' . esc_url(home_url('/')) . '">';
+    echo '<meta property="og:type" content="website">';
+    
     ?>
 </head>
 <body <?php body_class(); ?>>
