@@ -1,0 +1,25 @@
+Generate a detailed description for a {service_title} service. 
+Include key features and benefits. 
+The content should be informative, engaging, and optimized for SEO. 
+Structure the content has html with appropriate headings (H2 and H3) and bullet points where necessary. 
+Aim for approximately 500 words. 
+Return just the content I request, no intro, no outro, no commentary.
+Use the following structure and replace the placeholders with actual content:
+
+<h2>Introduction to {service_title}</h2>
+[Introduction content here]
+
+<h2>Key Features</h2>
+[Key features content here]
+
+<h2>Benefits</h2>
+[Benefits content here]
+
+<h3>For Businesses</h3>
+[Business benefits content here]
+
+<h3>For Individuals</h3>
+[Individual benefits content here]
+
+<h2>Why Choose Our {service_title} Service</h2>
+[Unique selling points and conclusion content here]
