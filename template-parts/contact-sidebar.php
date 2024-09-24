@@ -5,7 +5,7 @@
         <h3 class="card-subtitle mb-3">How Can We Help?</h3>
         <ul class="list-unstyled">
     <li class="d-flex align-items-start mb-4">
-        <div class="primary-bg text-white p-3 rounded-3 me-3" style="width: 56px; height: 56px;">
+        <div class="primary-bg text-white p-3 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
             <i class="fas fa-envelope fa-lg"></i>
         </div>
         <div>
@@ -16,7 +16,7 @@
         </div>
     </li>
     <li class="d-flex align-items-start mb-4">
-        <div class="primary-bg text-white p-3 rounded-3 me-3" style="width: 56px; height: 56px;">
+        <div class="primary-bg text-white p-3 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
             <i class="fas fa-map-marker-alt fa-lg"></i>
         </div>
         <div>
@@ -24,8 +24,8 @@
             <p class="mb-0 text-muted"><?php echo esc_html(get_option('site_address', '')); ?></p>
         </div>
     </li>
-    <li class="d-flex align-items-start mb-4">
-        <div class="primary-bg text-white p-3 rounded-3 me-3" style="width: 56px; height: 56px;">
+    <li class="d-flex align-items-start mb-0">
+        <div class="primary-bg text-white p-3 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
             <i class="fas fa-phone fa-lg"></i>
         </div>
         <div>
