@@ -1,7 +1,7 @@
 <section class="py-5 py-md-6">
   <div class="container">
     <div class="row gy-4">
-      <div class="col-lg-6 position-relative" style="min-height: 500px;">
+      <div class="col-lg-6 position-relative">
         <div class="sticky-top" style="top: 20px;">
           <?php
           $homepage_why = rnr_replace(get_field('homepage_why'));

@@ -49,7 +49,7 @@ function ranknrent_render_service_content_meta_box($post) {
 
 // Save meta box content
 function ranknrent_save_service_content() {
-    if (!isset($_POST['ranknrent_services_content']) || !isset($_POST['_wpnonce'])) {
+    if (!isset($_POST['ranknrent_services_content']) || !isset($_POST['ranknrent_hero_subheading']) || !isset($_POST['_wpnonce'])) {
         wp_redirect(admin_url('admin.php?page=rank_rent_services_content&error=1'));
         exit;
     }
@@ -59,12 +59,21 @@ function ranknrent_save_service_content() {
     }
 
     $services_content = $_POST['ranknrent_services_content'];
-    foreach ($services_content as $service_id => $content) {
+    $hero_subheadings = $_POST['ranknrent_hero_subheading'];
+
+    foreach ($services_content as $post_id => $content) {
         $post_data = array(
-            'ID' => $service_id,
+            'ID' => $post_id,
             'post_content' => wp_kses_post($content)
         );
         wp_update_post($post_data);
+
+        // Update hero subheading
+        if (isset($hero_subheadings[$post_id])) {
+            $hero_field = get_field('hero', $post_id);
+            $hero_field['hero_subheading'] = sanitize_text_field($hero_subheadings[$post_id]);
+            update_field('hero', $hero_field, $post_id);
+        }
     }
 
     // Redirect back to the settings page with a success message
@@ -266,6 +275,12 @@ function ranknrent_render_content_editor($post, $type) {
     echo '<td>';
     echo '<h3>' . esc_html($post->post_title) . ' <a href="' . esc_url($permalink) . '" target="_blank">(View ' . $type . ')</a></h3>';
     
+    // Add hero subheading field
+    $hero_field = get_field('hero', $post->ID);
+    $hero_subheading = isset($hero_field['hero_subheading']) ? $hero_field['hero_subheading'] : '';
+    echo '<label for="hero_subheading_' . $post->ID . '"><strong>Hero Subheading:</strong></label><br>';
+    echo '<input type="text" id="hero_subheading_' . $post->ID . '" name="ranknrent_hero_subheading[' . $post->ID . ']" value="' . esc_attr($hero_subheading) . '" style="width: 100%; margin-bottom: 10px;"><br>';
+
     $settings = array(
         'textarea_name' => "ranknrent_services_content[{$post->ID}]",
         'textarea_rows' => 10,
