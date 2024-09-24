@@ -89,13 +89,21 @@ function ranknrent_add_image_sizes() {
 
 
 function add_conditional_custom_header_code() {
-    // Check if search engines are allowed to index the site
-    if (get_option('blog_public') == '1') {
-        echo '<meta name="robots" content="index, follow">';
-        echo '<meta name="googlebot" content="index, follow">';
-        echo '<link rel="sitemap" type="application/xml" title="Sitemap" href="/wp-sitemap.xml">';
-        
-        // You can add more SEO-friendly meta tags or scripts here
+    // Check if the current page is a 404 page
+    if (is_404()) {
+        // Send 404 status header
+        status_header(404);
+        echo '<meta name="robots" content="noindex, follow">';
+        echo '<meta name="googlebot" content="noindex, follow">';
+    } else {
+        // Check if search engines are allowed to index the site
+        if (get_option('blog_public') == '1') {
+            echo '<meta name="robots" content="index, follow">';
+            echo '<meta name="googlebot" content="index, follow">';
+            echo '<link rel="sitemap" type="application/xml" title="Sitemap" href="/wp-sitemap.xml">';
+            
+            // You can add more SEO-friendly meta tags or scripts here
+        }
     }
 }
 
