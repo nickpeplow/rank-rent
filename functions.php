@@ -1,13 +1,10 @@
 <?php
-// Include custom post types
+// Include necessary files
 require get_template_directory() . '/inc/post-types.php';
-
-// Include the multisite settings file
 require_once get_template_directory() . '/inc/multisite.php';
-
-// Near the top of your functions.php file
 require_once get_template_directory() . '/inc/ai-content-generator.php';
 
+// Theme setup
 function rankandrent_setup() {
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
@@ -17,19 +14,14 @@ function rankandrent_setup() {
 }
 add_action('after_setup_theme', 'rankandrent_setup');
 
+// Enqueue scripts and styles
 function rankandrent_scripts() {
     $theme_version = wp_get_theme()->get('Version');
-
-    // Enqueue Bootstrap CSS
+    // Enqueue styles
     wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css', array(), $theme_version);
-    
-    // Enqueue Font Awesome CSS
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', array(), $theme_version);
-    
-    // Enqueue theme's main stylesheet
     wp_enqueue_style('rankandrent-style', get_stylesheet_uri(), array(), $theme_version);
-    
-    // Enqueue Bootstrap JS
+    // Enqueue scripts
     wp_enqueue_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', array(), '5.3.0', true);
 }
 add_action('wp_enqueue_scripts', 'rankandrent_scripts');
@@ -43,6 +35,7 @@ function add_additional_class_on_li($classes, $item, $args) {
 }
 add_filter('nav_menu_css_class', 'add_additional_class_on_li', 1, 3);
 
+// Add custom link classes
 function add_menu_link_class($atts, $item, $args) {
     if (property_exists($args, 'link_class')) {
         $atts['class'] = $args->link_class;
@@ -51,6 +44,7 @@ function add_menu_link_class($atts, $item, $args) {
 }
 add_filter('nav_menu_link_attributes', 'add_menu_link_class', 1, 3);
 
+// Register widget area
 function rankandrent_widgets_init() {
     register_sidebar(array(
         'name'          => __('Sidebar', 'rankandrent'),
@@ -64,15 +58,13 @@ function rankandrent_widgets_init() {
 }
 add_action('widgets_init', 'rankandrent_widgets_init');
 
-// Add this to your theme's functions.php file
+// Customize theme options
 function theme_customize_register($wp_customize) {
     $wp_customize->add_section('favicon_section', array(
         'title' => 'Favicon',
         'priority' => 30,
     ));
-
     $wp_customize->add_setting('favicon');
-
     $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'favicon', array(
         'label' => 'Upload Favicon',
         'section' => 'favicon_section',
@@ -81,13 +73,14 @@ function theme_customize_register($wp_customize) {
 }
 add_action('customize_register', 'theme_customize_register');
 
+// Add image sizes
 add_action('after_setup_theme', 'ranknrent_add_image_sizes');
 function ranknrent_add_image_sizes() {
     add_image_size('service-thumbnail', 600, 338, true); // 16:9 aspect ratio
     add_image_size('testimonial-avatar', 80, 80, array('center', 'center'));
 }
 
-
+// Add conditional custom header code
 function add_conditional_custom_header_code() {
     // Check if the current page is a 404 page
     if (is_404()) {
