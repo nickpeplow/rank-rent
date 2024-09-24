@@ -34,7 +34,11 @@
                                     <?php if (has_post_thumbnail()) : ?>
                                         <?php the_post_thumbnail('service-thumbnail', array('class' => 'card-img-top', 'alt' => get_the_title())); ?>
                                     <?php else : ?>
-                                        <img src="https://via.placeholder.com/600x338" class="card-img-top" alt="<?php the_title_attribute(); ?>">
+                                        <?php
+                                        $service_name = urlencode(get_the_title());
+                                        $placeholder_url = "https://placehold.jp/32/cccccc/ffffff/600x338.png?text=" . $service_name;
+                                        ?>
+                                        <img src="<?php echo esc_url($placeholder_url); ?>" class="card-img-top" alt="<?php the_title_attribute(); ?>">
                                     <?php endif; ?>
                                 </div>
                                 <div class="card-body text-center">
