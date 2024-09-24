@@ -15,7 +15,7 @@ Please generate content following this structure. Adapt the headings in [bracket
 h3 Service Area
 [Description of areas within and around [site_location] where the service is available]
 
-[A single line call-to-action encouraging visitors to reach out, dont specify any details like pricing orspecific contact details. There is a form below]
+[A single line call-to-action encouraging visitors to reach out, dont specify any details like pricing orspecific contact details. For context there is a form below, but do not include any form details or headings in the call-to-action]
 
 Key points to remember:
 
