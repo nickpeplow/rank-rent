@@ -32,6 +32,12 @@ if ($services_query->have_posts()) :
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.3s ease;
+        }
+        .service-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         .service-image {
             flex: 0 0 200px;
@@ -56,7 +62,6 @@ if ($services_query->have_posts()) :
         .read-more-link {
             align-self: flex-start;
             margin-top: 10px;
-            text-decoration: none;
             color: #007bff;
         }
     </style>';
@@ -66,7 +71,7 @@ if ($services_query->have_posts()) :
         $service_description = get_field('service_short_description');
         $service_description = $service_description ? rnr_replace($service_description) : 'Brief description of the service. Click to learn more.';
         ?>
-        <article class="service-card">
+        <a href="<?php echo $service_link; ?>" class="service-card">
             <div class="service-image">
                 <?php
                 if (has_post_thumbnail()) {
@@ -79,9 +84,9 @@ if ($services_query->have_posts()) :
             <div class="service-content">
                 <h3 class="service-title"><?php the_title(); ?></h3>
                 <div class="service-description"><?php echo $service_description; ?></div>
-                <a href="<?php echo $service_link; ?>" class="read-more-link">Read more</a>
+                <span class="read-more-link">Read more</span>
             </div>
-        </article>
+        </a>
         <?php
     endwhile;
     echo '</div>';
