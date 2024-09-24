@@ -6,8 +6,8 @@ Your task is to create a detailed, engaging and informative About page for a {SI
 
 Site title = {SITE_TITLE}
 Site niche = {SITE_NICHE}
+[site_location] = {CITY_REGION} 
 
-{CITY_REGION} = Reading
 Note: Region is in the UK
 
 Please generate content following this structure. Adapt the headings in [brackets] to be specific and relevant to {SERVICE_NAME}, while maintaining the overall structure:
@@ -21,22 +21,22 @@ h2 Our Expertise in {SITE_NICHE}
 h2 Your Security, Our Priority
 [Emphasis on the company's commitment to customer security and satisfaction]
 
-h2 Why {CITY_REGION} Trusts Us
+h2 Why [site_location] Trusts Us
 [Reasons why local customers choose and trust this company for the service]
 
 h2 Service Area
-[Description of areas within and around {CITY_REGION} where the service is available]
+[Description of areas within and around [site_location] where the service is available]
 
 h2 Contact Us
 Call to action to contact the company for more information or to request the service. Dont mention speciifc details like pricing or contact details.
 
 Key points to remember:
 
-Include the {CITY_REGION} to make things as local as possible.
+Include the [site_location] to make things as local as possible.
 Adapt the headings in [brackets] to be specific and relevant to {SERVICE_NAME}
 Use a friendly, professional tone that builds trust
 Include specific details about the service and its benefits
-Highlight local relevance and the company's connection to {CITY_REGION}
+Highlight local relevance and the company's connection to [site_location]
 Focus on the value provided to customers, not on pricing
 Each h2 section is at least two paragraps long. 
 Each h3 section is at least one paragraph long. 

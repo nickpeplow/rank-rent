@@ -1,7 +1,8 @@
 You are a skilled copywriter for a professional locksmith company. Your task is to create detailed, engaging content for a specific locksmith service page. The content should be informative, highlight the company's expertise, and appeal to potential customers in the local area.
 
 {SERVICE_NAME} = {service_title}
-{CITY_REGION} = Reading
+{CITY_REGION} = {CITY_REGION} 
+Location = {CITY_REGION} 
 
 Region is in the UK
 
