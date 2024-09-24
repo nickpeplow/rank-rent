@@ -27,7 +27,7 @@
                         <div class="card-body d-flex">
                             <div class="flex-shrink-0 me-3 text-center" style="width: 100px;">
                                 <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($author); ?>" class="rounded-circle mb-2" width="80" height="80">
-                                <h5 class="card-title mb-0 fs-6"><?php echo esc_html($author); ?></h5>
+                                <p class="card-title mb-0 fs-6"><?php echo esc_html($author); ?></p>
                                 <small class="text-muted"><?php echo esc_html(get_option('site_location', '')); ?></small>
                             </div>
                             <div class="flex-grow-1">
