@@ -97,10 +97,14 @@ function ranknrent_generate_service_content() {
 
     $prompt = ($post->post_type === 'services') 
         ? ranknrent_get_service_prompt($post->post_title)
-        : ranknrent_get_about_prompt();
+        : (($post->post_name === 'about-us') 
+            ? ranknrent_get_about_prompt()
+            : (($post->post_name === 'contact')
+                ? ranknrent_get_contact_prompt()
+                : false));
     
     if (!$prompt) {
-        wp_send_json_error('Prompt file not found');
+        wp_send_json_error('Prompt file not found or invalid page type');
         return;
     }
 
@@ -156,6 +160,22 @@ function ranknrent_get_about_prompt() {
     return $prompt;
 }
 
+// Function to get contact prompt
+function ranknrent_get_contact_prompt() {
+    $prompt_file = get_template_directory() . '/prompts/contact_prompt.txt';
+    if (!file_exists($prompt_file)) {
+        return false;
+    }
+    $prompt = file_get_contents($prompt_file);
+    $site_niche = ranknrent_get_site_niche_name();
+    $site_title = get_bloginfo('name');
+    $site_location = ranknrent_get_site_location();
+    $prompt = str_replace('{SITE_NICHE}', $site_niche, $prompt);
+    $prompt = str_replace('{SITE_TITLE}', $site_title, $prompt);
+    $prompt = str_replace('{CITY_REGION}', $site_location, $prompt);
+    return $prompt;
+}
+
 // Enqueue JavaScript for AJAX functionality
 function ranknrent_enqueue_admin_scripts($hook) {
     if ('rank-rent_page_rank_rent_services_content' !== $hook) {
@@ -186,6 +206,7 @@ add_action('admin_init', 'ranknrent_register_services_settings');
 function ranknrent_services_section_callback() {
     $services = get_posts(array('post_type' => 'services', 'posts_per_page' => -1));
     $about_page = get_page_by_path('about-us');
+    $contact_page = get_page_by_path('contact');
     
     echo '<table class="form-table">';
     
@@ -194,6 +215,13 @@ function ranknrent_services_section_callback() {
         ranknrent_render_content_editor($about_page, 'About');
     } else {
         echo '<tr><td><p>About page not found. Please create a page with the slug "about-us".</p></td></tr>';
+    }
+    
+    // Add Contact page
+    if ($contact_page) {
+        ranknrent_render_content_editor($contact_page, 'Contact');
+    } else {
+        echo '<tr><td><p>Contact page not found. Please create a page with the slug "contact".</p></td></tr>';
     }
     
     // Add Services

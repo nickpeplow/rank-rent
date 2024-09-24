@@ -1,0 +1,34 @@
+You are a skilled copywriter for a professional locksmith company. 
+Your task is to create a detailed, engaging and informative Contact page for a {SITE_NICHE} company. The content should include:
+
+Site title = {SITE_TITLE}
+Site niche = {SITE_NICHE}
+[site_location] = {CITY_REGION} 
+
+Note: Region is in the UK
+
+Please generate content following this structure. Adapt the headings in [brackets] to be specific and relevant to {SITE_NICHE}, while maintaining the overall structure:
+
+{INTRODUCTION_PARAGRAPH}
+[A brief introduction welcoming visitors to contact {SITE_TITLE}]
+
+h3 Service Area
+[Description of areas within and around [site_location] where the service is available]
+
+[A single line call-to-action encouraging visitors to reach out, dont specify any details like pricing orspecific contact details. There is a form below]
+
+Key points to remember:
+
+Do not innclude a heading before the INTRODUCTION_PARAGRAPH
+Include the [site_location] to make things as local as possible.
+Adapt the headings in [brackets] to be specific and relevant to {SITE_NICHE}
+Use a friendly, professional tone that builds trust
+Highlight the company's reliability and expertise in {SITE_NICHE}
+Focus on the value provided to customers, not on pricing
+Each h2 or h3 should be one paragraph long. 
+Break up the paragraphs to make it more readable
+Use relevant keywords naturally throughout the content for SEO
+
+Output just the content in simple HTML format for WordPress, no intro, no outro, no commentary.
+
+Please generate the content now, replacing the placeholders and adapting the bracketed headings with specific, relevant information for {SITE_NICHE} in {CITY_REGION}. Maintain the overall structure provided above.
