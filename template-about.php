@@ -8,7 +8,7 @@ $template = 'about';
 get_header();
 
 $hero_data = rnr_replace(get_field('hero'));
-$hero_subheading = $hero_data['hero_subheading'] ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar.';
+$hero_subheading = $hero_data['hero_subheading'] ?? '';
 
 // Handle background image whether it's an ID, an array, or not set
 $background_image = $hero_data['hero_background_image'] ?? null;

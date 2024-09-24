@@ -101,7 +101,9 @@ function ranknrent_generate_service_content() {
             ? ranknrent_get_about_prompt()
             : (($post->post_name === 'contact')
                 ? ranknrent_get_contact_prompt()
-                : false));
+                : (($post->post_name === 'services')
+                    ? ranknrent_get_services_prompt()
+                    : false)));
     
     if (!$prompt) {
         wp_send_json_error('Prompt file not found or invalid page type');
@@ -176,6 +178,22 @@ function ranknrent_get_contact_prompt() {
     return $prompt;
 }
 
+// Function to get services prompt
+function ranknrent_get_services_prompt() {
+    $prompt_file = get_template_directory() . '/prompts/services_prompt.txt';
+    if (!file_exists($prompt_file)) {
+        return false;
+    }
+    $prompt = file_get_contents($prompt_file);
+    $site_niche = ranknrent_get_site_niche_name();
+    $site_title = get_bloginfo('name');
+    $site_location = ranknrent_get_site_location();
+    $prompt = str_replace('{SITE_NICHE}', $site_niche, $prompt);
+    $prompt = str_replace('{SITE_TITLE}', $site_title, $prompt);
+    $prompt = str_replace('{CITY_REGION}', $site_location, $prompt);
+    return $prompt;
+}
+
 // Enqueue JavaScript for AJAX functionality
 function ranknrent_enqueue_admin_scripts($hook) {
     if ('rank-rent_page_rank_rent_services_content' !== $hook) {
@@ -207,8 +225,16 @@ function ranknrent_services_section_callback() {
     $services = get_posts(array('post_type' => 'services', 'posts_per_page' => -1));
     $about_page = get_page_by_path('about-us');
     $contact_page = get_page_by_path('contact');
+    $services_page = get_page_by_path('services');
     
     echo '<table class="form-table">';
+    
+    // Add Services page
+    if ($services_page) {
+        ranknrent_render_content_editor($services_page, 'Services');
+    } else {
+        echo '<tr><td><p>Services page not found. Please create a page with the slug "services".</p></td></tr>';
+    }
     
     // Add About page
     if ($about_page) {
@@ -224,7 +250,7 @@ function ranknrent_services_section_callback() {
         echo '<tr><td><p>Contact page not found. Please create a page with the slug "contact".</p></td></tr>';
     }
     
-    // Add Services
+    // Add individual Services
     foreach ($services as $service) {
         ranknrent_render_content_editor($service, 'Service');
     }
