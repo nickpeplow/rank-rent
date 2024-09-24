@@ -19,7 +19,8 @@
                 } elseif (is_numeric($image)) {
                     $image_url = wp_get_attachment_image_url($image, 'testimonial-avatar');
                 } else {
-                    $image_url = "https://i.pravatar.cc/250?u=$i";
+                    $encoded_name = urlencode($author);
+                    $image_url = "https://ui-avatars.com/api/?name={$encoded_name}&size=100";
                 }
             ?>
                 <div class="col-lg-6 mb-4">
