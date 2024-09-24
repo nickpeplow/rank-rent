@@ -108,3 +108,11 @@ function add_conditional_custom_header_code() {
 }
 
 add_action('wp_head', 'add_conditional_custom_header_code');
+
+// redirect author page to home page
+add_action( 'template_redirect', function() {
+    if ( is_author() ) {
+        wp_redirect( home_url(), 301);
+        die;
+    }
+} );
