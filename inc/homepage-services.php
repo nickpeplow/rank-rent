@@ -32,9 +32,25 @@
                             <div class="card h-100 shadow-sm transition-hover">
                                 <div class="card-img-wrapper" style="aspect-ratio: 16/9; overflow: hidden;">
                                     <?php if (has_post_thumbnail()) : ?>
-                                        <?php the_post_thumbnail('service-thumbnail', array('class' => 'card-img-top', 'alt' => get_the_title())); ?>
+                                        <?php
+                                        $thumbnail_id = get_post_thumbnail_id();
+                                        $thumbnail_data = wp_get_attachment_image_src($thumbnail_id, 'service-thumbnail');
+                                        if ($thumbnail_data) {
+                                            $width = $thumbnail_data[1];
+                                            $height = $thumbnail_data[2];
+                                        } else {
+                                            $width = 600;
+                                            $height = 338;
+                                        }
+                                        ?>
+                                        <?php the_post_thumbnail('service-thumbnail', array(
+                                            'class' => 'card-img-top',
+                                            'alt' => get_the_title(),
+                                            'width' => $width,
+                                            'height' => $height
+                                        )); ?>
                                     <?php else : ?>
-                                        <img src="https://via.placeholder.com/600x338" class="card-img-top" alt="<?php the_title_attribute(); ?>">
+                                        <img src="https://via.placeholder.com/600x338" class="card-img-top" alt="<?php the_title_attribute(); ?>" width="600" height="338">
                                     <?php endif; ?>
                                 </div>
                                 <div class="card-body text-center">
