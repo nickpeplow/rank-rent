@@ -1,8 +1,12 @@
 <?php
+
+	
+add_post_type_support( 'page', 'excerpt' );
 // Include necessary files
 require get_template_directory() . '/inc/post-types.php';
 require_once get_template_directory() . '/inc/multisite.php';
 require_once get_template_directory() . '/inc/ai-content-generator.php';
+require_once get_template_directory() . '/inc/network-settings.php';
 
 // Theme setup
 function rankandrent_setup() {

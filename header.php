@@ -64,29 +64,6 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<div class="bg-light py-2 py-md-3">
-  <div class="container">
-    <div class="row align-items-center gy-2 gy-md-0">
-      <div class="col-md-3 text-center text-md-start order-md-1 order-2">
-        <i class="fas fa-phone-alt me-2 fs-4"></i>
-        <span class="fs-4"><?php echo esc_attr(get_option('site_phone', '123-456-7890')); ?></span>
-      </div>
-      <div class="col-md-6 text-center order-md-2 order-1">
-        <?php
-        if (has_custom_logo()) {
-            the_custom_logo();
-        } else {
-            echo '<a href="' . esc_url(home_url('/')) . '" class="text-dark fw-bold text-decoration-none display-6">' . get_bloginfo('name') . '</a>';
-        }
-        ?>
-      </div>
-      <div class="col-md-3 text-center text-md-end order-md-3 order-3">
-        <a href="/contact" class="btn cta-bg btn-lg text-white px-4 py-2 fs-5">
-          <?php echo get_theme_mod('header_cta_text', 'Request a Service'); ?>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
 
+<?php get_template_part('template-parts/header', 'logobar'); ?>
 <?php get_template_part('template-parts/header', 'navbar'); ?>
