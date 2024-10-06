@@ -5,14 +5,14 @@
         <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none d-inline-flex align-items-center">
           <img src="https://placehold.co/75x75?text=Icon" alt="Logo Icon" class="img-fluid">
           <h1 class="ms-3 mb-0 lh-1">
-            <span class="d-block text-primary fs-4 fw-bold">Example</span>
+            <span class="d-block text-primary fs-4 fw-bold"><?= get_option('site_location', '') ?></span>
             <span class="d-block text-dark fs-2 fw-bold"><?php echo rr_get_site_niche('') ?></span>
           </h1>
         </a>
       </div>
       <div class="col-md-4 text-center">
         <p class="mb-2 fs-6">Save On All <?php echo rr_get_site_niche('') ?> Services</p>
-        <a href="<?php echo esc_url(home_url('/contact/')); ?>" class="btn btn-primary btn-lg">Get a Quote Today</a>
+        <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-lg">Get a Quote Today</a>
       </div>
       <div class="col-md-4 text-center text-md-end">
         <p class="mb-0 fs-4 fw-bold lh-1">Call Us Today!</p>

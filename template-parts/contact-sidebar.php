@@ -1,6 +1,6 @@
 <div class="card raised-card d-none d-md-block" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 14px 0px; border-bottom: 5px solid #00664e;">
     <div class="card-body p-4">
-        <?php $site_niche = ranknrent_get_site_niche_name(); ?>
+        <?php $site_niche = rr_get_site_niche(''); ?>
         <h5 class="card-title text-primary-color"><?php echo esc_html(get_option('site_location', '')); ?> <?php echo esc_html($site_niche); ?></h5>
         <h3 class="card-subtitle mb-3">How Can We Help?</h3>
         <ul class="list-unstyled">

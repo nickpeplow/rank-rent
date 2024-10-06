@@ -2,7 +2,7 @@
 <!-- Services Section -->
 <section class="services py-5 pb-4 pb-md-6 primary-bg">
     <div class="container">
-        <h2 class="text-center mb-1 text-white"><?php echo esc_html($site_niche); ?> Services</h2>
+        <h2 class="text-center mb-1 text-white"><?php echo rr_get_site_niche('') ?> Services</h2>
         <?php
         // Update this line to correctly retrieve the ACF field
         $services_data = rnr_replace(get_field('homepage_services'));

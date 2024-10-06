@@ -15,7 +15,7 @@ $hero_subheading = rnr_replace($hero_subheading);
 $background_image_url = get_option('site_default_hero', '');
 
 $location = get_option('site_location', '');
-$site_niche = ranknrent_get_site_niche_name();
+$site_niche = rr_get_site_niche('');
 $hero_heading = "Professional and Affordable $site_niche in $location";
 $hero_heading = rnr_replace($hero_heading);
 

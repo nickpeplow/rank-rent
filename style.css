@@ -73,3 +73,15 @@ body {
     background-color: var(--primary-hover-color);
     border-color: var(--primary-hover-color);
 }
+
+/* Override Bootstrap's border-success class to use primary color */
+.border-success {
+    --bs-border-opacity: 1;
+    border-color: var(--primary-color) !important;
+}
+
+/* If you want to support opacity, you can use the RGB values of the primary color */
+.border-success {
+    --bs-border-opacity: 1;
+    border-color: rgba(var(--primary-color-rgb), var(--bs-border-opacity)) !important;
+}

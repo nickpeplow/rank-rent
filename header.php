@@ -18,22 +18,13 @@
     // Ensure the multisite.php file is included
     require_once get_template_directory() . '/inc/multisite.php';
 
-    // Get the selected niche
-    $niche_slug = get_option('site_niche', '');
+    // // Get the selected niche
+    // $niche_slug = get_option('site_niche', '');
 
     $primary_color = rr_get_primary_color('#007bff'); // Use the function with a default color
     $primary_hover_color = rr_get_primary_hover_color(); // Get the hover color
     $cta_color = '#ffc107'; // Default CTA color
     $secondary_background = '#D5D8DA'; // Default secondary background color
-
-    // Get the niche details
-    $niche = ranknrent_get_niche_details($niche_slug);
-
-    if ($niche && isset($niche['colors'])) {
-        $primary_color = $niche['colors']['primary-color'] ?? $primary_color;
-        $cta_color = $niche['colors']['cta-color'] ?? $cta_color;
-        $secondary_background = $niche['colors']['secondary-background'] ?? $secondary_background;
-    }
 
     // Output the colors as CSS variables
     echo '<style>:root { 
