@@ -35,9 +35,18 @@
         --primary-color-rgb: ' . implode(',', sscanf($primary_color, "#%02x%02x%02x")) . '; 
     }</style>';
 
+    // Get the excerpt for the description
+    $description = get_the_excerpt();
+    if (empty($description)) {
+        $description = get_bloginfo('description');
+    }
+
+    // Add meta description
+    echo '<meta name="description" content="' . esc_attr($description) . '">';
+
     // Add Open Graph tags
     echo '<meta property="og:title" content="' . esc_attr(get_bloginfo('name')) . '">';
-    echo '<meta property="og:description" content="' . esc_attr(get_bloginfo('description')) . '">';
+    echo '<meta property="og:description" content="' . esc_attr($description) . '">';
     echo '<meta property="og:url" content="' . esc_url(home_url('/')) . '">';
     echo '<meta property="og:image" content="' . esc_url(get_template_directory_uri() . '/assets/images/og-image.jpg') . '">';
     echo '<meta property="og:type" content="website">';
