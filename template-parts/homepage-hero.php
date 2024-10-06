@@ -27,7 +27,7 @@ $hero_heading = rnr_replace($hero_heading);
             <div class="col-lg-8">
                 <h1 class="display-5"><?php echo esc_html($hero_heading); ?></h1>
                 <p class="lead mb-4"><?php echo esc_html($hero_subheading); ?></p>
-                <a href="/services" class="btn cta-bg btn-lg text-white">View All Services</a>
+                <a href="/services" class="btn btn-primary btn-lg text-white">View All Services</a>
             </div>
         </div>
     </div>

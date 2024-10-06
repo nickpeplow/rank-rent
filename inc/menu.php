@@ -9,7 +9,7 @@
         <img src="https://via.placeholder.com/200x50?text=Your+Logo" alt="<?= $site->title() ?> Logo" height="80">
       </div>
       <div class="col-md-4 text-center text-md-end order-md-3 order-3">
-        <a href="#" class="btn cta-bg btn-lg text-white px-4 py-2 fs-5">Request a Service</a>
+        <a href="#" class="btn btn-primary btn-lg text-white px-4 py-2 fs-5">Request a Service</a>
       </div>
     </div>
   </div>

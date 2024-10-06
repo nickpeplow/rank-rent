@@ -66,7 +66,29 @@ class RR_Network_Settings {
             'rr_network_settings'
         );
 
+        // Add primary color setting
+        add_settings_field(
+            'rr_primary_color',
+            'Primary Color',
+            array($this, 'color_picker_callback'),
+            'rankandrent-network-settings',
+            'rr_network_settings',
+            array('label_for' => 'rr_primary_color', 'default' => '#007bff')
+        );
+
+        // Add secondary color setting
+        add_settings_field(
+            'rr_secondary_color',
+            'Secondary Color',
+            array($this, 'color_picker_callback'),
+            'rankandrent-network-settings',
+            'rr_network_settings',
+            array('label_for' => 'rr_secondary_color', 'default' => '#6c757d')
+        );
+
         register_setting('rr_network_settings', 'rr_site_niche');
+        register_setting('rr_network_settings', 'rr_primary_color');
+        register_setting('rr_network_settings', 'rr_secondary_color');
     }
 
     public function network_settings_callback() {
@@ -81,12 +103,30 @@ class RR_Network_Settings {
         <?php
     }
 
+    public function color_picker_callback($args) {
+        $option_name = $args['label_for'];
+        $value = get_network_option(get_main_network_id(), $option_name, $args['default']);
+        ?>
+        <input type="color" id="<?php echo esc_attr($option_name); ?>" name="<?php echo esc_attr($option_name); ?>" value="<?php echo esc_attr($value); ?>" class="regular-text" />
+        <?php
+    }
+
     public function update_network_settings() {
         check_admin_referer('rr_network_settings-options');
 
         if (isset($_POST['rr_site_niche'])) {
             $site_niche = sanitize_text_field($_POST['rr_site_niche']);
             update_network_option(get_main_network_id(), 'rr_site_niche', $site_niche);
+        }
+
+        if (isset($_POST['rr_primary_color'])) {
+            $primary_color = sanitize_hex_color($_POST['rr_primary_color']);
+            update_network_option(get_main_network_id(), 'rr_primary_color', $primary_color);
+        }
+
+        if (isset($_POST['rr_secondary_color'])) {
+            $secondary_color = sanitize_hex_color($_POST['rr_secondary_color']);
+            update_network_option(get_main_network_id(), 'rr_secondary_color', $secondary_color);
         }
 
         wp_redirect(add_query_arg(array('page' => 'rankandrent-network-settings', 'updated' => 'true'), network_admin_url('admin.php')));
@@ -97,6 +137,14 @@ class RR_Network_Settings {
         if ($hook !== 'toplevel_page_rankandrent-network-settings') {
             return;
         }
+
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('wp-color-picker');
+        wp_add_inline_script('wp-color-picker', '
+            jQuery(document).ready(function($) {
+                $(".color-picker").wpColorPicker();
+            });
+        ');
 
         wp_add_inline_style('admin-menu', $this->get_admin_css());
     }
@@ -143,4 +191,42 @@ function rr_get_site_niche($default = '') {
     } else {
         return get_option('rr_site_niche', $default);
     }
+}
+
+// Add these functions at the bottom of the file
+function rr_get_theme_color($color_name, $default = '') {
+    if (is_multisite()) {
+        return get_network_option(get_main_network_id(), "rr_{$color_name}_color", $default);
+    } else {
+        return get_option("rr_{$color_name}_color", $default);
+    }
+}
+
+// You can keep these individual functions if you prefer
+function rr_get_primary_color($default = '') {
+    return rr_get_theme_color('primary', $default);
+}
+
+function rr_get_secondary_color($default = '') {
+    return rr_get_theme_color('secondary', $default);
+}
+
+function rr_get_primary_hover_color($amount = 15) {
+    $primary_color = rr_get_primary_color('#007bff'); // Default to #007bff if not set
+    return rr_adjust_brightness($primary_color, $amount);
+}
+
+function rr_adjust_brightness($hex, $steps) {
+    // Convert hex to rgb
+    $rgb = array_map('hexdec', str_split(ltrim($hex, '#'), 2));
+    
+    // Adjust brightness
+    foreach ($rgb as &$color) {
+        $color = max(0, min(255, $color + $steps));
+    }
+    
+    // Convert rgb back to hex
+    return '#' . implode('', array_map(function($n) {
+        return str_pad(dechex($n), 2, '0', STR_PAD_LEFT);
+    }, $rgb));
 }

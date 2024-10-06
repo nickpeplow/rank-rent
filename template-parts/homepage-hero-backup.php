@@ -14,7 +14,7 @@
           
           <!-- Updated button section -->
           <div>
-            <a href="/services/" class="btn cta-bg btn-lg">Our Services</a>
+            <a href="/services/" class="btn btn-primary btn-lg">Our Services</a>
           </div>
         </div>
         <!-- End Heading -->
@@ -53,7 +53,7 @@
               <div class="mb-3">
                 <textarea class="form-control" name="notes" rows="3" placeholder="Briefly describe your needs..."></textarea>
               </div>
-              <button type="submit" class="btn cta-bg w-100">Get Your Free Quote</button>
+              <button type="submit" class="btn btn-primary w-100">Get Your Free Quote</button>
             </form>
             <div class="text-center mt-3">
               <small class="text-muted">Need help? <a href="./page-help-center.html" class="text-primary-color">Visit our Help Center</a></small>

@@ -56,7 +56,7 @@
                                 <div class="card-body text-center">
                                     <h3 class="h4 card-title"><?php the_title(); ?></h3>
                                     <p class="card-text"><?php echo esc_html($service_description); ?></p>
-                                    <span class="btn cta-bg text-white">Learn More</span>
+                                    <span class="btn btn-primary text-white">Learn More</span>
                                 </div>
                             </div>
                         </a>

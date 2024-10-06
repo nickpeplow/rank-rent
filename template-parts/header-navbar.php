@@ -51,14 +51,14 @@
   }
   .dropdown-item:hover,
   .dropdown-item:focus {
-    background-color: #157347; /* Original hover color */
+    background-color: var(--primary-hover-color); /* Use the new hover color variable */
     color: white;
   }
   
-  /* New hover color for submenu items */
+  /* Update hover color for submenu items */
   .services-submenu .dropdown-item:hover,
   .services-submenu .dropdown-item:focus {
-    background-color: #00795d; /* Different tint of bg-success */
+    background-color: var(--primary-hover-color); /* Use the new hover color variable */
     color: white;
   }
   
@@ -75,6 +75,6 @@
   }
   
   .submenu {
-    background-color: var(--primary-bg-color); /* Assuming primary-bg uses a CSS variable */
+    background-color: var(--primary-color); /* Use the primary color variable */
   }
 </style>

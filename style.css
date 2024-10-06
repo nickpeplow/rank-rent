@@ -35,21 +35,12 @@ body {
     background-color: var(--primary-color);
 }
 
-.cta-bg {
+.btn-primary {
     background-color: var(--cta-color);
     transition: background-color 0.3s, filter 0.3s;
 }
 
-.cta-bg:hover {
-    filter: brightness(75%); /* Darken the color by 25% */
-}
-
-a.btn.cta-bg {
-    background-color: var(--cta-color);
-    transition: background-color 0.3s, filter 0.3s;
-}
-
-a.btn.cta-bg:hover {
+.btn-primary:hover {
     filter: brightness(75%); /* Darken the color by 25% */
 }
 
@@ -59,4 +50,26 @@ a.btn.cta-bg:hover {
 
 .text-primary-color {
     color: var(--primary-color);
+}
+
+/* Add styles for dropdown items */
+.dropdown-item:hover {
+    background-color: var(--primary-hover-color);
+    color: #fff; /* Ensure text is visible on the hover background */
+}
+
+/* Override Bootstrap's text-primary class */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+/* Ensure primary buttons use our custom primary color */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: var(--primary-hover-color);
+    border-color: var(--primary-hover-color);
 }
