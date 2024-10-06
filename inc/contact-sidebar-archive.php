@@ -1,4 +1,4 @@
-<div class="card raised-card d-none d-md-block" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 14px 0px; border-bottom: 5px solid #00664e;">
+<div class="card raised-card d-none d-md-block border-bottom border-bottom-primary border-thick" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 14px 0px;">
     <div class="card-body p-4">
         <?php $site_niche = ranknrent_get_site_niche_name(); ?>
         <h5 class="card-title text-primary-color"><?php echo esc_html(get_option('site_location', '')); ?> <?php echo esc_html($site_niche); ?></h5>

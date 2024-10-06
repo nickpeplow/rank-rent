@@ -19,7 +19,7 @@
         $why_heading = $homepage_why['why_heading'] ?? 'Default Why Choose Us Heading';
         $why_subheading = $homepage_why['why_subheading'] ?? 'Default Why Choose Us Subheading';
         ?>
-        <h2 class="mb-3 pb-2 border-bottom border-success border-thick"><?php echo esc_html($why_heading); ?></h2>
+        <h2 class="mb-3 pb-2 border-bottom border-bottom-primary border-thick"><?php echo esc_html($why_heading); ?></h2>
         <p class="lead mb-4"><?php echo esc_html($why_subheading); ?></p>
         <div class="row gy-4">
           <?php for ($i = 1; $i <= 6; $i++) : 

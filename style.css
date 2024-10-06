@@ -85,3 +85,8 @@ body {
     --bs-border-opacity: 1;
     border-color: rgba(var(--primary-color-rgb), var(--bs-border-opacity)) !important;
 }
+
+/* Add a class for primary color bottom border */
+.border-bottom-primary {
+    border-bottom-color: var(--primary-color) !important;
+}

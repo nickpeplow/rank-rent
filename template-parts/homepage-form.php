@@ -1,4 +1,4 @@
-<div class="card homepage-form-card" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 14px 0px; border-bottom: 5px solid #00664e;">
+<div class="card homepage-form-card border-bottom border-bottom-primary border-thick" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 14px 0px;">
     <div class="card-body p-4">
         <div class="text-center mb-3">
             <i class="fas fa-clipboard-list text-primary-color mb-2" style="font-size: 2.5rem;"></i>
