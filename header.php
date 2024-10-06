@@ -40,7 +40,11 @@
     if (empty($description)) {
         $description = get_bloginfo('description');
     }
-
+    
+    // Remove any HTML tags and limit the length
+    $description = wp_strip_all_tags($description);
+    $description = substr($description, 0, 160); // Limit to 160 characters
+    
     // Add meta description
     echo '<meta name="description" content="' . esc_attr($description) . '">';
 
