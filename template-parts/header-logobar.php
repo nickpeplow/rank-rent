@@ -1,8 +1,8 @@
 <div class="container-fluid bg-light py-3">
   <div class="container">
     <div class="row align-items-center gy-3">
-      <div class="col-md-4 text-center">
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none d-inline-flex align-items-center">
+      <div class="col-md-4 text-center text-md-start">
+        <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none d-inline-flex d-md-flex align-items-center justify-content-center justify-content-md-start">
           <div class="d-flex align-items-center">
             <img src="<?php echo get_template_directory_uri(); ?>/images/locksmith-icon.png" alt="Locksmith Icon" class="img-fluid" style="max-height: 80px; width: auto;">
             <h1 class="ms-3 mb-0 lh-1 text-start">
