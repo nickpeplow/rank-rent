@@ -1,11 +1,11 @@
 <div class="container-fluid bg-light py-3">
   <div class="container">
     <div class="row align-items-center gy-3">
-      <div class="col-md-4 text-center text-md-start">
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none d-flex align-items-center">
+      <div class="col-md-4 text-center">
+        <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none d-inline-flex align-items-center">
           <div class="d-flex align-items-center">
-            <img src="https://placehold.co/75x75?text=Icon" alt="Logo Icon" class="img-fluid">
-            <h1 class="ms-3 mb-0 lh-1">
+            <img src="<?php echo get_template_directory_uri(); ?>/images/locksmith-icon.png" alt="Locksmith Icon" class="img-fluid" style="max-height: 80px; width: auto;">
+            <h1 class="ms-3 mb-0 lh-1 text-start">
               <span class="d-block text-primary fs-4 fw-bold"><?= get_option('site_location', '') ?></span>
               <span class="d-block text-dark fs-2 fw-bold"><?php echo rr_get_site_niche('') ?></span>
             </h1>
