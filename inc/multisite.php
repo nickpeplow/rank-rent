@@ -334,6 +334,22 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         }
     }
     add_action('admin_enqueue_scripts', 'ranknrent_enqueue_media_uploader');
+
+    // Add this new function to register the REST API endpoint
+    function ranknrent_register_site_location_api() {
+        register_rest_route('ranknrent/v1', '/site-location', array(
+            'methods' => 'GET',
+            'callback' => 'ranknrent_get_site_location_api',
+            'permission_callback' => '__return_true'
+        ));
+    }
+    add_action('rest_api_init', 'ranknrent_register_site_location_api');
+
+    // Callback function to return the site location
+    function ranknrent_get_site_location_api() {
+        $site_location = get_option('site_location', '');
+        return array('site_location' => $site_location);
+    }
 }
 
 // Include the services content file
