@@ -350,6 +350,49 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         $site_location = get_option('site_location', '');
         return array('site_location' => $site_location);
     }
+
+    if (!function_exists('ranknrent_register_site_location_setting')) {
+        function ranknrent_register_site_location_setting() {
+            register_setting(
+                'general',
+                'site_location',
+                array(
+                    'type' => 'string',
+                    'description' => 'The location of the site',
+                    'show_in_rest' => true,
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'default' => '',
+                )
+            );
+        }
+        add_action('init', 'ranknrent_register_site_location_setting');
+
+        // Add a custom REST API endpoint to update site location
+        add_action('rest_api_init', function () {
+            register_rest_route('ranknrent/v1', '/update-site-location', array(
+                'methods' => 'POST',
+                'callback' => 'ranknrent_update_site_location_callback',
+                'permission_callback' => function() {
+                    return current_user_can('manage_options');
+                }
+            ));
+        });
+
+        function ranknrent_update_site_location_callback($request) {
+            $location = $request->get_param('site_location');
+            if (empty($location)) {
+                return new WP_Error('empty_location', 'Site location cannot be empty', array('status' => 400));
+            }
+            
+            $updated = update_option('site_location', $location);
+            
+            if ($updated) {
+                return new WP_REST_Response(array('message' => 'Site location updated successfully'), 200);
+            } else {
+                return new WP_Error('update_failed', 'Failed to update site location', array('status' => 500));
+            }
+        }
+    }
 }
 
 // Include the services content file
