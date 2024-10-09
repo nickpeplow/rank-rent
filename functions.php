@@ -165,3 +165,37 @@ function set_post_defaults_acf($post_id=0,$post_type='') {
         }
     }
 }
+
+// Add rewrite rule for custom endpoint
+function add_set_acf_defaults_endpoint() {
+    add_rewrite_rule('^set-acf-defaults/([0-9]+)/?', 'index.php?set_acf_defaults=1&post_id=$matches[1]', 'top');
+}
+add_action('init', 'add_set_acf_defaults_endpoint');
+
+// Add query var
+function add_set_acf_defaults_query_var($vars) {
+    $vars[] = 'set_acf_defaults';
+    $vars[] = 'post_id';
+    return $vars;
+}
+add_filter('query_vars', 'add_set_acf_defaults_query_var');
+
+// Handle the custom endpoint
+function handle_set_acf_defaults() {
+    if (get_query_var('set_acf_defaults') == 1) {
+        $post_id = get_query_var('post_id');
+        $post = get_post($post_id);
+
+        if (!$post) {
+            wp_die('Invalid post ID.');
+        }
+
+        // Run the function to set ACF defaults
+        set_post_defaults_acf($post_id, $post->post_type);
+
+        // Output a simple message
+        echo "ACF defaults have been set for post ID: " . $post_id;
+        exit;
+    }
+}
+add_action('template_redirect', 'handle_set_acf_defaults');
