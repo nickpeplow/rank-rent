@@ -113,3 +113,55 @@ add_action( 'template_redirect', function() {
         die;
     }
 } );
+
+// Add this new function to set ACF defaults when a post is created
+function set_acf_defaults_on_post_creation($post_id, $post, $update) {
+    // Only run for new posts, not updates
+    if (!$update) {
+        set_post_defaults_acf($post_id, $post->post_type);
+    }
+}
+add_action('wp_insert_post', 'set_acf_defaults_on_post_creation', 10, 3);
+
+/**
+ * Sets the ACF Fields for the specified post
+ * @param int $post_id
+ * @param string $post_type
+ */
+function set_post_defaults_acf($post_id=0,$post_type='') {
+    if ($post_id &&
+           $post_type &&
+           function_exists('update_field')
+    ) {
+
+        // Get field groups for this post type and id.
+        $field_groups = acf_get_field_groups(array(
+            'post_id'    => $post_id,
+            'post_type'    => $post_type
+        ));
+
+        // Loop through the field groups
+        foreach ($field_groups as $field_group) {
+
+            // Get all fields associated wiht this group
+            $fields = acf_get_fields($field_group);
+            if ($fields) {
+
+                // loop through each field
+                foreach ($fields as $field) {
+
+                    // Grab our needed values
+                    $key_id = $field['key'] ?? false;
+                    $name = $field['name'] ?? false;
+                    $default = $field['default_value'] ?? false;
+
+                    // Only apply to fields that have a name value (skips tabs etc)
+                    if ($key_id && $name) {
+                        // Save the field to the post with the default value
+                        update_field($name,$default,$post_id);
+                    }
+                }
+            }
+        }
+    }
+}
