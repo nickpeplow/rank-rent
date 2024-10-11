@@ -199,3 +199,6 @@ function handle_set_acf_defaults() {
     }
 }
 add_action('template_redirect', 'handle_set_acf_defaults');
+
+// Include the site details API file
+require_once get_template_directory() . '/inc/site-details-api.php';
