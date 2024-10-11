@@ -60,6 +60,7 @@ $hero_heading = rnr_replace($hero_heading);
               <div class="so-widget-sow-editor so-widget-sow-editor-base">
                 <div class="siteorigin-widget-tinymce textwidget">
                     <?php 
+                    $about_heading = get_post_meta(get_the_ID(), 'homepage_about_about_heading', true) ?: '';
                     $about_text = get_post_meta(get_the_ID(), 'homepage_about_about_text', true) ?: '';
                     ?>
                     <h2 class="h2 mb-4"><?php echo esc_html($about_heading); ?></h2>
