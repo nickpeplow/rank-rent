@@ -7,10 +7,7 @@
  * @param string $background_image The background image URL (optional)
  */
  
-$hero_data = rnr_replace(get_field('hero'));
-$hero_subheading = $hero_data['hero_subheading'] ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar.';
-$hero_subheading = rnr_replace($hero_subheading);
-
+$hero_subheading = rnr_replace(get_field('hero_subheading'));
 
 $background_image_url = get_option('site_default_hero', '');
 

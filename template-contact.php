@@ -7,8 +7,7 @@ $template = 'contact';
 
 get_header();
 
-$hero_data = rnr_replace(get_field('hero'));
-$hero_subheading = $hero_data['hero_subheading'] ?? '';
+$hero_subheading = rnr_replace(get_field('hero_subheading'));
 
 // Handle background image whether it's an ID, an array, or not set
 $background_image = $hero_data['hero_background_image'] ?? null;
