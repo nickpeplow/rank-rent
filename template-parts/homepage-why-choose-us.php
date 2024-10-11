@@ -4,7 +4,7 @@
       <div class="col-lg-6 position-relative">
         <div class="sticky-top" style="top: 20px;">
           <?php
-          $homepage_why = rnr_replace(get_field('homepage_why'));
+          $homepage_why = rnr_replace(get_post_meta(get_the_ID(), 'homepage_why', true));
           $why_image = $homepage_why['why_image'] ?? null;
           $image_url = $why_image['url'] ?? 'https://via.placeholder.com/600x600';
           $image_alt = $why_image['alt'] ?? 'Why Choose Us Image';

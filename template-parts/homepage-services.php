@@ -4,8 +4,8 @@
     <div class="container">
         <h2 class="text-center mb-1 text-white"><?= get_option('site_location', '') ?> <?php echo rr_get_site_niche('') ?> Services Near Me</h2>
         <?php
-        // Update this line to correctly retrieve the ACF field
-        $services_data = rnr_replace(get_field('homepage_services'));
+        // Update this line to correctly retrieve the custom field
+        $services_data = rnr_replace(get_post_meta(get_the_ID(), 'homepage_services', true));
         $services_subheading = $services_data['services_subheading'] ?? 'Discover our range of professional services tailored to meet your needs.';
         ?>
         <div class="row justify-content-center">
@@ -24,7 +24,7 @@
             if ($services_query->have_posts()) :
                 while ($services_query->have_posts()) : $services_query->the_post();
                     $service_link = get_permalink();
-                    $service_description = rnr_replace(get_field('service_short_description'));
+                    $service_description = rnr_replace(get_post_meta(get_the_ID(), 'service_short_description', true));
                     $service_description = $service_description ? $service_description : '';
                     ?>
                     <div class="col-md-4 mb-4">

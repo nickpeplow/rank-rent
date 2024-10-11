@@ -2,10 +2,10 @@
 <!-- Services Section -->
 <section class="services py-5 pb-4 pb-md-6 primary-bg">
     <div class="container">
-        <h2 class="text-center mb-1 text-white"<?php echo rr_get_site_niche('') ?> Services</h2>
+        <h2 class="text-center mb-1 text-white"><?php echo rr_get_site_niche('') ?> Services</h2>
         <?php
-        // Update this line to correctly retrieve the ACF field
-        $services_data = rnr_replace(get_field('homepage_services'));
+        // Update this line to correctly retrieve the custom field
+        $services_data = rnr_replace(get_post_meta(get_option('page_on_front'), 'homepage_services', true));
         $services_subheading = $services_data['services_subheading'] ?? 'Discover our range of professional services tailored to meet your needs.';
         ?>
         <div class="row justify-content-center">
@@ -24,7 +24,7 @@
             if ($services_query->have_posts()) :
                 while ($services_query->have_posts()) : $services_query->the_post();
                     $service_link = get_permalink();
-                    $service_description = rnr_replace(get_field('service_short_description'));
+                    $service_description = rnr_replace(get_post_meta(get_the_ID(), 'service_short_description', true));
                     $service_description = $service_description ? $service_description : '';
                     ?>
                     <div class="col-md-4 mb-4">

@@ -3,8 +3,8 @@
 require_once get_template_directory() . '/inc/setup.php';
 
 if (!function_exists('ranknrent_add_settings_menu')) {
-    // Add a new menu item in the sidebar
     function ranknrent_add_settings_menu() {
+        // Add a new menu item in the sidebar
         add_menu_page(
             'Rank & Rent Settings',
             'Rank & Rent',
@@ -26,8 +26,9 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         );
     }
     add_action('admin_menu', 'ranknrent_add_settings_menu');
+}
 
-    // Render the settings page
+if (!function_exists('ranknrent_render_settings_page')) {
     function ranknrent_render_settings_page() {
         ?>
         <div class="wrap">
@@ -62,8 +63,9 @@ if (!function_exists('ranknrent_add_settings_menu')) {
             }
         }
     }
+}
 
-    // Register settings
+if (!function_exists('ranknrent_register_settings')) {
     function ranknrent_register_settings() {
         register_setting('rank_rent_options', 'site_location', 'sanitize_text_field');
         register_setting('rank_rent_options', 'site_niche', 'sanitize_text_field');
@@ -142,19 +144,22 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         register_setting('rank_rent_options', 'site_default_hero', 'esc_url_raw');
     }
     add_action('admin_init', 'ranknrent_register_settings');
+}
 
-    // Section callback
+if (!function_exists('ranknrent_section_callback')) {
     function ranknrent_section_callback() {
         echo '<p>Enter the details for this Rank & Rent site.</p>';
     }
+}
 
-    // Field callback
+if (!function_exists('ranknrent_location_field_callback')) {
     function ranknrent_location_field_callback() {
         $location = get_option('site_location', '');
         echo '<input type="text" name="site_location" value="' . esc_attr($location) . '" class="regular-text">';
     }
+}
 
-    // Niche field callback
+if (!function_exists('ranknrent_niche_field_callback')) {
     function ranknrent_niche_field_callback() {
         $niche_slug = get_option('site_niche', '');
         $niches = ranknrent_get_niches();
@@ -165,29 +170,36 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         }
         echo '</select>';
     }
+}
 
-    // New section callback
+if (!function_exists('ranknrent_contact_section_callback')) {
     function ranknrent_contact_section_callback() {
         echo '<p>Enter the contact details for this Rank & Rent site.</p>';
     }
+}
 
-    // New field callbacks
+if (!function_exists('ranknrent_address_field_callback')) {
     function ranknrent_address_field_callback() {
         $address = get_option('site_address', '');
         echo '<input type="text" name="site_address" value="' . esc_attr($address) . '" class="regular-text">';
     }
+}
 
+if (!function_exists('ranknrent_email_field_callback')) {
     function ranknrent_email_field_callback() {
         $email = get_option('site_email', '');
         echo '<input type="email" name="site_email" value="' . esc_attr($email) . '" class="regular-text">';
     }
+}
 
+if (!function_exists('ranknrent_phone_field_callback')) {
     function ranknrent_phone_field_callback() {
         $phone = get_option('site_phone', '');
         echo '<input type="tel" name="site_phone" value="' . esc_attr($phone) . '" class="regular-text">';
     }
+}
 
-    // New field callback for hero image
+if (!function_exists('ranknrent_hero_field_callback')) {
     function ranknrent_hero_field_callback() {
         $hero_image = get_option('site_default_hero', '');
         ?>
@@ -197,8 +209,9 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         <img id="hero_image_preview" src="<?php echo esc_url($hero_image); ?>" style="max-width: 300px; <?php echo empty($hero_image) ? 'display:none;' : ''; ?>">
         <?php
     }
+}
 
-    // Function to get niches from JSON file
+if (!function_exists('ranknrent_get_niches')) {
     function ranknrent_get_niches() {
         $json_file = get_template_directory() . '/inc/niches.json';
         if (file_exists($json_file)) {
@@ -207,18 +220,21 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         }
         return array();
     }
+}
 
-    // Function to get the site location (can be used in your theme)
+if (!function_exists('ranknrent_get_site_location')) {
     function ranknrent_get_site_location() {
         return get_option('site_location', '');
     }
+}
 
-    // Function to get the site niche (can be used in your theme)
+if (!function_exists('ranknrent_get_site_niche')) {
     function ranknrent_get_site_niche() {
         return get_option('site_niche', '');
     }
+}
 
-    // Function to get niche details by slug
+if (!function_exists('ranknrent_get_niche_details')) {
     function ranknrent_get_niche_details($slug) {
         $json_file = get_template_directory() . '/inc/niches.json';
         if (file_exists($json_file)) {
@@ -237,41 +253,50 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         }
         return null;
     }
+}
 
-    // Function to get services for the current niche
+if (!function_exists('ranknrent_get_niche_services')) {
     function ranknrent_get_niche_services() {
         $niche_slug = ranknrent_get_site_niche();
         $niche = ranknrent_get_niche_details($niche_slug);
         return $niche ? $niche['services'] : array();
     }
+}
 
-    // New getter functions
+if (!function_exists('ranknrent_get_site_address')) {
     function ranknrent_get_site_address() {
         return get_option('site_address', '');
     }
+}
 
+if (!function_exists('ranknrent_get_site_email')) {
     function ranknrent_get_site_email() {
         return get_option('site_email', '');
     }
+}
 
+if (!function_exists('ranknrent_get_site_phone')) {
     function ranknrent_get_site_phone() {
         return get_option('site_phone', '');
     }
+}
 
-    // Function to get the site niche name (can be used in your theme)
+if (!function_exists('ranknrent_get_site_niche_name')) {
     function ranknrent_get_site_niche_name() {
         $niche_slug = get_option('site_niche', '');
         $niche = ranknrent_get_niche_details($niche_slug);
         return $niche ? $niche['name'] : '';
     }
+}
 
-    // Add this new function to create a shortcode for site location
+if (!function_exists('ranknrent_site_location_shortcode')) {
     function ranknrent_site_location_shortcode() {
         return esc_html(get_option('site_location', ''));
     }
     add_shortcode('site_location', 'ranknrent_site_location_shortcode');
+}
 
-    // Function to replace [site_location] in content
+if (!function_exists('ranknrent_replace_site_location')) {
     function ranknrent_replace_site_location($content) {
         $site_location = esc_html(get_option('site_location', ''));
         return str_replace('[site_location]', $site_location, $content);
@@ -294,8 +319,9 @@ if (!function_exists('ranknrent_add_settings_menu')) {
 
     // Optional: If you want to allow shortcodes in titles
     //add_filter('the_title', 'do_shortcode');
+}
 
-    // New function to replace [site_location] in given content
+if (!function_exists('rnr_replace')) {
     function rnr_replace($content) {
         $site_location = esc_html(get_option('site_location', ''));
 
@@ -309,10 +335,9 @@ if (!function_exists('ranknrent_add_settings_menu')) {
 
         return $content;
     }
+}
 
-    // Example usage in a theme page
-    // echo rnr_replace($your_content_variable);
-
+if (!function_exists('get_niche_colors')) {
     function get_niche_colors($slug) {
         $json = file_get_contents(get_template_directory() . '/inc/niches.json');
         $niches = json_decode($json, true);
@@ -325,8 +350,9 @@ if (!function_exists('ranknrent_add_settings_menu')) {
     
         return null;
     }
+}
 
-    // Enqueue media library scripts
+if (!function_exists('ranknrent_enqueue_media_uploader')) {
     function ranknrent_enqueue_media_uploader() {
         if (isset($_GET['page']) && $_GET['page'] === 'rank_rent') {
             wp_enqueue_media();
@@ -334,8 +360,9 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         }
     }
     add_action('admin_enqueue_scripts', 'ranknrent_enqueue_media_uploader');
+}
 
-    // Add this new function to register the REST API endpoint
+if (!function_exists('ranknrent_register_site_location_api')) {
     function ranknrent_register_site_location_api() {
         register_rest_route('ranknrent/v1', '/site-location', array(
             'methods' => 'GET',
@@ -344,53 +371,56 @@ if (!function_exists('ranknrent_add_settings_menu')) {
         ));
     }
     add_action('rest_api_init', 'ranknrent_register_site_location_api');
+}
 
-    // Callback function to return the site location
+if (!function_exists('ranknrent_get_site_location_api')) {
     function ranknrent_get_site_location_api() {
         $site_location = get_option('site_location', '');
         return array('site_location' => $site_location);
     }
+}
 
-    if (!function_exists('ranknrent_register_site_location_setting')) {
-        function ranknrent_register_site_location_setting() {
-            register_setting(
-                'general',
-                'site_location',
-                array(
-                    'type' => 'string',
-                    'description' => 'The location of the site',
-                    'show_in_rest' => true,
-                    'sanitize_callback' => 'sanitize_text_field',
-                    'default' => '',
-                )
-            );
+if (!function_exists('ranknrent_register_site_location_setting')) {
+    function ranknrent_register_site_location_setting() {
+        register_setting(
+            'general',
+            'site_location',
+            array(
+                'type' => 'string',
+                'description' => 'The location of the site',
+                'show_in_rest' => true,
+                'sanitize_callback' => 'sanitize_text_field',
+                'default' => '',
+            )
+        );
+    }
+    add_action('init', 'ranknrent_register_site_location_setting');
+
+    // Add a custom REST API endpoint to update site location
+    add_action('rest_api_init', function () {
+        register_rest_route('ranknrent/v1', '/update-site-location', array(
+            'methods' => 'POST',
+            'callback' => 'ranknrent_update_site_location_callback',
+            'permission_callback' => function() {
+                return current_user_can('manage_options');
+            }
+        ));
+    });
+}
+
+if (!function_exists('ranknrent_update_site_location_callback')) {
+    function ranknrent_update_site_location_callback($request) {
+        $location = $request->get_param('site_location');
+        if (empty($location)) {
+            return new WP_Error('empty_location', 'Site location cannot be empty', array('status' => 400));
         }
-        add_action('init', 'ranknrent_register_site_location_setting');
-
-        // Add a custom REST API endpoint to update site location
-        add_action('rest_api_init', function () {
-            register_rest_route('ranknrent/v1', '/update-site-location', array(
-                'methods' => 'POST',
-                'callback' => 'ranknrent_update_site_location_callback',
-                'permission_callback' => function() {
-                    return current_user_can('manage_options');
-                }
-            ));
-        });
-
-        function ranknrent_update_site_location_callback($request) {
-            $location = $request->get_param('site_location');
-            if (empty($location)) {
-                return new WP_Error('empty_location', 'Site location cannot be empty', array('status' => 400));
-            }
-            
-            $updated = update_option('site_location', $location);
-            
-            if ($updated) {
-                return new WP_REST_Response(array('message' => 'Site location updated successfully'), 200);
-            } else {
-                return new WP_Error('update_failed', 'Failed to update site location', array('status' => 500));
-            }
+        
+        $updated = update_option('site_location', $location);
+        
+        if ($updated) {
+            return new WP_REST_Response(array('message' => 'Site location updated successfully'), 200);
+        } else {
+            return new WP_Error('update_failed', 'Failed to update site location', array('status' => 500));
         }
     }
 }

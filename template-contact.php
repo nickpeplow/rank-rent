@@ -7,10 +7,10 @@ $template = 'contact';
 
 get_header();
 
-$hero_subheading = rnr_replace(get_field('hero_subheading'));
+$hero_subheading = rnr_replace(get_post_meta(get_the_ID(), 'hero_subheading', true));
 
 // Handle background image whether it's an ID, an array, or not set
-$background_image = $hero_data['hero_background_image'] ?? null;
+$background_image = get_post_meta(get_the_ID(), 'hero_background_image', true);
 
 if (is_array($background_image) && isset($background_image['ID'])) {
     $background_image_url = wp_get_attachment_image_url($background_image['ID'], 'full');

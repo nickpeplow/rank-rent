@@ -4,7 +4,7 @@
         <h2 class="text-center mb-5">What Our Clients Say About Us</h2>
         <div class="row justify-content-center">
             <?php
-            $homepage_testimonials = get_field('homepage_testimonials');
+            $homepage_testimonials = rnr_replace(get_post_meta(get_option('page_on_front'), 'homepage_testimonials', true));
             
             for ($i = 1; $i <= 4; $i++) : 
                 $quote = $homepage_testimonials["testimonial_{$i}_quote"] ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
@@ -25,24 +25,19 @@
                 <div class="col-lg-6 mb-4">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body d-flex">
-                            <div class="flex-shrink-0 me-3 text-center" style="width: 100px;">
-                                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($author); ?>" class="rounded-circle mb-2" width="80" height="80">
-                                <h5 class="card-title mb-0 fs-6"><?php echo esc_html($author); ?></h5>
-                                <small class="text-muted"><?php echo esc_html(get_option('site_location', '')); ?></small>
+                            <div class="flex-shrink-0 me-3">
+                                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($author); ?>" class="rounded-circle" width="80" height="80">
                             </div>
                             <div class="flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <?php for ($j = 0; $j < $rating; $j++) : ?>
-                                            <i class="fas fa-star text-warning"></i>
-                                        <?php endfor; ?>
-                                    </div>
-                                    <div class="text-primary-color">
-                                        <i class="fas fa-check-circle"></i> Verified Review
-                                    </div>
+                                <h3 class="card-title h5 mb-1"><?php echo esc_html($author); ?></h3>
+                                <p class="text-muted small mb-2"><?php echo esc_html($location); ?></p>
+                                <div class="mb-2">
+                                    <?php for ($j = 0; $j < $rating; $j++) : ?>
+                                        <i class="fas fa-star text-warning"></i>
+                                    <?php endfor; ?>
                                 </div>
                                 <blockquote class="blockquote mb-0">
-                                    <p class="mb-0"><i class="fas fa-quote-left text-primary-color me-2"></i><?php echo esc_html($quote); ?></p>
+                                    <p class="mb-0"><?php echo esc_html($quote); ?></p>
                                 </blockquote>
                             </div>
                         </div>

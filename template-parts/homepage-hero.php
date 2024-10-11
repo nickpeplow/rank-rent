@@ -7,7 +7,7 @@
  * @param string $background_image The background image URL (optional)
  */
  
-$hero_subheading = rnr_replace(get_field('hero_subheading'));
+$hero_subheading = rnr_replace(get_post_meta(get_the_ID(), 'hero_subheading', true));
 
 $background_image_url = get_option('site_default_hero', '');
 
@@ -60,7 +60,7 @@ $hero_heading = rnr_replace($hero_heading);
               <div class="so-widget-sow-editor so-widget-sow-editor-base">
                 <div class="siteorigin-widget-tinymce textwidget">
                     <?php 
-                    $homepage_about = rnr_replace(get_field('homepage_about')) ?: [];
+                    $homepage_about = rnr_replace(get_post_meta(get_the_ID(), 'homepage_about', true)) ?: [];
                     $about_heading = $homepage_about['about_heading'] ?? 'About Us';
                     $about_text = $homepage_about['about_text'] ?? 'Welcome to our company. We provide high-quality services to meet all your needs. Our team of experts is dedicated to ensuring customer satisfaction and delivering exceptional results.';
                     ?>

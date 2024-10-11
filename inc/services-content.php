@@ -276,8 +276,7 @@ function ranknrent_render_content_editor($post, $type) {
     echo '<h3>' . esc_html($post->post_title) . ' <a href="' . esc_url($permalink) . '" target="_blank">(View ' . $type . ')</a></h3>';
     
     // Add hero subheading field
-    $hero_field = get_field('hero', $post->ID);
-    $hero_subheading = isset($hero_field['hero_subheading']) ? $hero_field['hero_subheading'] : '';
+    $hero_subheading = get_post_meta($post->ID, 'hero_subheading', true);
     echo '<label for="hero_subheading_' . $post->ID . '"><strong>Hero Subheading:</strong></label><br>';
     echo '<input type="text" id="hero_subheading_' . $post->ID . '" name="ranknrent_hero_subheading[' . $post->ID . ']" value="' . esc_attr($hero_subheading) . '" style="width: 100%; margin-bottom: 10px;"><br>';
 
