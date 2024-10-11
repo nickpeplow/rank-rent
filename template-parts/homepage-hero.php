@@ -60,9 +60,7 @@ $hero_heading = rnr_replace($hero_heading);
               <div class="so-widget-sow-editor so-widget-sow-editor-base">
                 <div class="siteorigin-widget-tinymce textwidget">
                     <?php 
-                    $homepage_about = rnr_replace(get_post_meta(get_the_ID(), 'homepage_about', true)) ?: [];
-                    $about_heading = $homepage_about['about_heading'] ?? 'About Us';
-                    $about_text = $homepage_about['about_text'] ?? 'Welcome to our company. We provide high-quality services to meet all your needs. Our team of experts is dedicated to ensuring customer satisfaction and delivering exceptional results.';
+                    $about_text = get_post_meta(get_the_ID(), 'homepage_about_about_text', true) ?: '';
                     ?>
                     <h2 class="h2 mb-4"><?php echo esc_html($about_heading); ?></h2>
                     <?php echo wp_kses_post($about_text); ?>
