@@ -23,7 +23,7 @@
             if ($services_query->have_posts()) :
                 while ($services_query->have_posts()) : $services_query->the_post();
                     $service_link = get_permalink();
-                    $service_description = rnr_replace(get_post_meta(get_the_ID(), 'service_short_description', true));
+                    $service_description = get_post_meta(get_the_ID(), 'service_short_description', true);
                     $service_description = $service_description ? $service_description : '';
                     ?>
                     <div class="col-md-4 mb-4">

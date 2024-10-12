@@ -7,7 +7,7 @@ $template = 'services';
 
 get_header();
 
-$hero_subheading = rnr_replace(get_post_meta(get_the_ID(), 'hero_subheading', true));
+$hero_subheading = get_post_meta(get_the_ID(), 'hero_subheading', true);
 
 // Handle background image whether it's an ID, an array, or not set
 $background_image = get_post_meta(get_the_ID(), 'hero_background_image', true);

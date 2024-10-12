@@ -585,7 +585,7 @@ function render_fields_recursive($fields, $post_id, $parent_field = '') {
     $output = '<ul>';
     foreach ($fields as $field) {
         $field_name = $parent_field ? $parent_field . '_' . $field['name'] : $field['name'];
-        $field_value = rnr_replace(get_field($field_name, $post_id));
+        $field_value = get_field($field_name, $post_id);
         
         $output .= '<li>';
         $output .= esc_html($field['label']) . ' (' . esc_html($field['type']) . '): ';

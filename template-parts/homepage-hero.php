@@ -7,15 +7,13 @@
  * @param string $background_image The background image URL (optional)
  */
  
-$hero_subheading = rnr_replace(get_post_meta(get_the_ID(), 'hero_subheading', true));
+$hero_subheading = get_post_meta(get_the_ID(), 'hero_subheading', true);
 
 $background_image_url = get_option('site_default_hero', '');
 
 $location = get_option('site_location', '');
 $site_niche = rr_get_site_niche('');
 $hero_heading = "Professional and Affordable $site_niche in $location";
-$hero_heading = rnr_replace($hero_heading);
-
 ?>
 
 <div class="hero-section" style="background-image: url('<?php echo esc_url($background_image_url); ?>');">

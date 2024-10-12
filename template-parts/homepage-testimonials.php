@@ -4,7 +4,7 @@
         <h2 class="text-center mb-5">What Our Clients Say About Us</h2>
         <div class="row justify-content-center">
             <?php
-            $homepage_testimonials = rnr_replace(get_post_meta(get_the_ID(), 'homepage_testimonials', true));
+            $homepage_testimonials = get_post_meta(get_the_ID(), 'homepage_testimonials', true);
             
             for ($i = 1; $i <= 4; $i++) : 
                 $quote = $homepage_testimonials["testimonial_{$i}_quote"] ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
