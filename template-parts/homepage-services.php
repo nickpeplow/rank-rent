@@ -5,8 +5,7 @@
         <h2 class="text-center mb-1 text-white"><?= get_option('site_location', '') ?> <?php echo rr_get_site_niche('') ?> Services Near Me</h2>
         <?php
         // Update this line to correctly retrieve the custom field
-        $services_data = rnr_replace(get_post_meta(get_the_ID(), 'homepage_services', true));
-        $services_subheading = $services_data['services_subheading'] ?? 'Discover our range of professional services tailored to meet your needs.';
+        $services_subheading = get_post_meta(get_option('page_on_front'), 'homepage_services_services_subheading', true);
         ?>
         <div class="row justify-content-center">
             <div class="col-md-8">
