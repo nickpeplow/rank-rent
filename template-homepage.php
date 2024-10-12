@@ -51,7 +51,9 @@ get_template_part('template-parts/homepage-hero', null, array(
 
     <?php get_template_part('template-parts/homepage', 'services'); ?>
 
-    <?php get_template_part('template-parts/homepage', 'why-choose-us'); ?>
+    <?php get_template_part('template-parts/homepage', 'why-choose-us', array(
+        'page_id' => get_the_ID()
+    )); ?>
 
     <?php get_template_part('template-parts/homepage', 'testimonials'); ?>
 
