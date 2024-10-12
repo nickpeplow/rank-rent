@@ -4,14 +4,15 @@
         <h2 class="text-center mb-5">What Our Clients Say About Us</h2>
         <div class="row justify-content-center">
             <?php
-            $homepage_testimonials = get_post_meta(get_the_ID(), 'homepage_testimonials', true);
+            // Get the current post ID
+            $post_id = get_the_ID();
             
             for ($i = 1; $i <= 4; $i++) : 
-                $quote = $homepage_testimonials["testimonial_{$i}_quote"] ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-                $author = $homepage_testimonials["testimonial_{$i}_name"] ?? 'John Doe';
-                $location = $homepage_testimonials["testimonial_{$i}_location"] ?? 'City, State';
-                $rating = $homepage_testimonials["testimonial_{$i}_rating"] ?? 5;
-                $image = $homepage_testimonials["testimonial_{$i}_avatar"] ?? null;
+                $quote = get_post_meta($post_id, "testimonial_{$i}_quote", true) ?: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+                $author = get_post_meta($post_id, "testimonial_{$i}_name", true) ?: 'John Doe';
+                $location = get_option('site_location', '');
+                $rating = get_post_meta($post_id, "testimonial_{$i}_rating", true) ?: 5;
+                $image = get_post_meta($post_id, "testimonial_{$i}_avatar", true);
                 
                 // Handle image whether it's an ID, an array, or not set
                 if (is_array($image) && isset($image['ID'])) {
