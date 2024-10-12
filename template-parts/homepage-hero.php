@@ -7,9 +7,7 @@
  * @param string $background_image The background image URL (optional)
  */
  
-$hero_subheading = get_post_meta(get_the_ID(), 'hero_subheading', true);
-
-$background_image_url = get_option('site_default_hero', '');
+$hero_subheading = get_post_meta($post->ID, 'hero_subheading', true);
 
 $location = get_option('site_location', '');
 $site_niche = rr_get_site_niche('');
@@ -58,8 +56,8 @@ $hero_heading = "Professional and Affordable $site_niche in $location";
               <div class="so-widget-sow-editor so-widget-sow-editor-base">
                 <div class="siteorigin-widget-tinymce textwidget">
                     <?php 
-                    $about_heading = get_post_meta(get_the_ID(), 'homepage_about_about_heading', true) ?: '';
-                    $about_text = get_post_meta(get_the_ID(), 'homepage_about_about_text', true) ?: '';
+                    $about_heading = get_post_meta($post->ID, 'about_heading', true);
+                    $about_text = get_post_meta($post->ID, 'about_text', true);
                     ?>
                     <h2 class="h2 mb-4"><?php echo esc_html($about_heading); ?></h2>
                     <?php echo wp_kses_post($about_text); ?>
