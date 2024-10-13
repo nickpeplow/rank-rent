@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
+    <title><?php
+    if (is_front_page()) {
+        echo esc_html(get_bloginfo('name')) . ' - ' . esc_html(get_bloginfo('description'));
+    } elseif (is_singular('post')) {
+        echo esc_html(get_the_title()) . ' - ' . esc_html(get_bloginfo('name'));
+    } elseif (is_page()) {
+        echo esc_html(get_the_title()) . ' - ' . esc_html(get_bloginfo('name'));
+    } elseif (is_singular('services')) {
+        echo esc_html(get_option('site_location', '')) . ' ' . esc_html(get_the_title()) . ' - ' . esc_html(get_bloginfo('name'));
+    } else {
+        wp_title('-', true, 'right');
+        echo esc_html(get_bloginfo('name'));
+    }
+    ?></title>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php wp_head(); ?>
